@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
+    name: Build
     outputs:
       full_sha: ${{ steps.var.outputs.full_sha }}
       short_sha: ${{ steps.var.outputs.short_sha }}
