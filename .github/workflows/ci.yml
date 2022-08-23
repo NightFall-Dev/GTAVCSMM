@@ -1,4 +1,4 @@
-name: Build
+name: Build Mod Menu
 
 on:
   schedule:
@@ -25,7 +25,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
     - name: Restore dependencies
       run: msbuild GTAVCSMM.sln /t:Restore /p:Configuration=Release
-    - name: Build 64bit release DLL
+    - name: Build 64bit release
       run: |
         msbuild /p:Configuration=Release /p:Platform=x64 GTAVCSMM.sln /warnaserror
     - name: Upload a Build Artifact
@@ -93,7 +93,7 @@ jobs:
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
-          tag_name: nightly
+          tag_name: 2.61
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -101,7 +101,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: Release [${{ needs.build.outputs.short_sha }}]
-          tag_name: nightly
+          tag_name: 2.61
           body: |
             **This release has been build by Github Actions**
             [Link to build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
@@ -116,7 +116,7 @@ jobs:
             Alternatively you can download the build artifacts, generate a SHA256 checksum and compare it with the below binary.
             Build artifacts ARE NOT automatically the same as release assets since release assets can be modified afterwards.
 
-            These are nightly builds of GTAVCS, they are provided for testing purposes only:
+            These are OUTDATED build, they are provided for testing purposes only:
             - Test if your build environment produces a broken GTAVCSMM.exe
             - Test if source code is out of date and no longer compatible with the current version of GTA V
 
