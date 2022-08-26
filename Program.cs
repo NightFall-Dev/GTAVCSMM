@@ -1,4 +1,4 @@
-﻿using GTAVCSMM.Config;
+using GTAVCSMM.Config;
 using GTAVCSMM.Helpers;
 using GTAVCSMM.Memory;
 using GTAVCSMM.Settings;
@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;//Suspend process Empty session
 using System.Windows.Forms;
 
 namespace GTAVCSMM
@@ -82,7 +83,7 @@ namespace GTAVCSMM
         public static Patterns pattern = new Patterns();
         public static TSettings settings = new TSettings();
         public static Mem Mem;
-        public static Thread _freezeGame;
+        //public static Thread _freezeGame;
 
         public static System.Windows.Forms.Timer ProcessTimer = new System.Windows.Forms.Timer();
         public static System.Windows.Forms.Timer MemoryTimer = new System.Windows.Forms.Timer();
@@ -401,14 +402,14 @@ namespace GTAVCSMM
             }
         }
 
-        public static void freezeGame()
+        /*public static void freezeGame()
         {
             Console.WriteLine("Freezing game");
             Speeder.Suspend(settings.gameProcess);
             Thread.Sleep(10000);
             Speeder.Resume(settings.gameProcess);
             _freezeGame.Abort();
-        }
+        }*/
         #endregion
 
 
@@ -1009,6 +1010,8 @@ namespace GTAVCSMM
 
         public static void runitem(int mainMenulevel, int menulevel, int menuItem)
         {
+            int[] tpIdArray;// Add tpIdArray
+            int[] tpColArray;// Add tpColArray
             Console.WriteLine("Command to run: " + mainMenulevel + " " + menulevel + " " + menuItem);
             switch (mainMenulevel)
             {
@@ -1083,8 +1086,9 @@ namespace GTAVCSMM
                                     break;
                                 case 4:
                                     Activate();
-                                    _freezeGame = new Thread(freezeGame) { IsBackground = true };
-                                    _freezeGame.Start();
+                                    /*_freezeGame = new Thread(freezeGame) { IsBackground = true };
+                                    _freezeGame.Start();*/
+                                    empty_session();
                                     break;
                                 case 5:
                                     Activate();
@@ -1194,8 +1198,10 @@ namespace GTAVCSMM
                                         bgodState = false;
                                     }
                                     Activate();
-                                    int[] tpIdArray = new int[] { 8 };
-                                    int[] tpColArray = new int[] { };
+                                    /*int[] tpIdArray = new int[] { 8 };
+                                    int[] tpColArray = new int[] { };*/
+                                    tpIdArray = new int[] { 8 };
+                                    tpColArray = new int[] { 84 };
                                     teleportBlip(tpIdArray, tpColArray, 20);
                                     if (!bgodState)
                                     {
@@ -1250,7 +1256,9 @@ namespace GTAVCSMM
                                     listboxFill(7, 0);
                                     break;
                                 case 1:
-                                    listboxFill(7, 1);
+                                    /*listboxFill(7, 1)*/
+                                    set_nightclub_produce_time(1, true);
+                                    Activate();
                                     break;
                                 case 2:
                                     listboxFill(7, 2);
@@ -1557,8 +1565,10 @@ namespace GTAVCSMM
                                         bGodMode = true;
                                         bgodState = false;
                                     }
-                                    int[] tpIdArray = new int[] { 614 };
-                                    int[] tpColArray = new int[] { };
+                                    /*int[] tpIdArray = new int[] { 614 };
+                                    int[] tpColArray = new int[] { };*/
+                                    tpIdArray = new int[] { 614 };
+                                    tpColArray = new int[] { };
                                     teleportBlip(tpIdArray, tpColArray);
                                     if (!bgodState)
                                     {
@@ -2576,7 +2586,10 @@ namespace GTAVCSMM
         private static void teleportBlip(int[] ID, int[] color, int height = 0)
         {
             Location tmpLoc = getBlipCoords(ID, color, height);
-            Location returnLoc = new Location
+            if (tmpLoc.x != 0 && tmpLoc.y != 0)
+            {
+                Teleport(tmpLoc);
+            /*Location returnLoc = new Location
             {
                 x = tmpLoc.x,
                 y = tmpLoc.y,
@@ -2584,7 +2597,7 @@ namespace GTAVCSMM
             };
             if (returnLoc.x != 0 && returnLoc.y != 0)
             {
-                Teleport(returnLoc);
+                Teleport(returnLoc);*/
             }
             else
             {
@@ -2595,7 +2608,7 @@ namespace GTAVCSMM
         private static Location getBlipCoords(int[] id, int[] color = null, int height = 0)
         {
             float zOffset = 0;
-            Location tempLocation = new() { };
+            Location tempLocation = new Location() { };
             for (int i = 2000; i > 1; i--)
             {
                 long blip = settings.BlipPTR + (i * 8);
@@ -2624,12 +2637,12 @@ namespace GTAVCSMM
             }
             if (tempLocation.z == 20)
             {
-                tempLocation.z = -255;
+                tempLocation.z = -255.0f;
+            } else
+            {
+                tempLocation.z = tempLocation.z + zOffset;
             }
-            tempLocation.z = tempLocation.z + zOffset;
-            if (tempLocation.x > 0) { tempLocation.x = (float)Math.Round(tempLocation.x, 3); }
-            if (tempLocation.y > 0) { tempLocation.y = (float)Math.Round(tempLocation.y, 3); }
-            if (tempLocation.z > 0) { tempLocation.y = (float)Math.Round(tempLocation.z, 3); }
+
             Console.WriteLine("New location: " + tempLocation.x + ", " + tempLocation.y + ", " + tempLocation.z);
             return new Location { x = tempLocation.x, y = tempLocation.y, z = tempLocation.z };
         }
@@ -2692,14 +2705,19 @@ namespace GTAVCSMM
         #endregion
 
         #region Global Addresses function
-        public static long GA(long Index)
+        public static T GG<T>(int index) where T : struct { return Mem.Read<T>(GA(index)); }
+
+        public static void SG<T>(int index, T vaule) where T : struct { Mem.Write<T>(GA(index), vaule); }
+        
+        public static long GA(int Index)
         {
             long p = settings.GlobalPTR + (8 * (Index >> 0x12 & 0x3F));
             long p_ga = Mem.ReadPointer(p, null);
             long p_ga_final = p_ga + (8 * (Index & 0x3FFFF));
             return p_ga_final;
         }
-        public static long _GG_Int(int Index)
+
+        public static int _GG_Int(int Index)
         {
             return Mem.ReadInt(GA(Index), null);
         }
@@ -2739,6 +2757,7 @@ namespace GTAVCSMM
             _SG_Int(1659575+4/*1655444 + 4*/, (int)oldhash);
             _SG_Int(1020252+5526/*1020252 + 5526*/, (int)oldvalue);
         }
+        #endregion
         public static long GetLocalScript(string name)
         {
             int size = name.Length;
@@ -2755,7 +2774,6 @@ namespace GTAVCSMM
             }
             return 0;
         }
-        #endregion
 
         public static void carSpawn(string Hash, int pegasus = 0)
         {
@@ -2875,6 +2893,15 @@ namespace GTAVCSMM
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
 
+        public static void empty_session()
+        {
+            Task.Run(() =>
+            {
+                ProcessMgr.SuspendProcess(settings.gameProcess);
+                Task.Delay(10000).Wait();
+                ProcessMgr.ResumeProcess(settings.gameProcess);
+            });
+        }
     }
     struct Location { public float x, y, z; }
 }
