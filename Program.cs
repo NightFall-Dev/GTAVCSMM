@@ -2507,23 +2507,23 @@ namespace GTAVCSMM
         {
             if (id == -1)
             {
-                _SG_Int(1574587 + 2, -1);
-                _SG_Int(1574587, 1);
+                _SG_Int(1574589+2/*1574587*/ + 2, -1);
+                _SG_Int(1574589/*1574587*/, 1);
                 Thread.Sleep(200);
-                _SG_Int(1574587, 0);
+                _SG_Int(1574589/*1574587*/, 0);
             }
             else if (id == -2)
             {
-                _SG_Int(1574587 + 2, 1);
+                _SG_Int(1574589/*1574587*/ + 2, 1);
                 Thread.Sleep(200);
-                _SG_Int(1574587, 0);
+                _SG_Int(1574589/*1574587*/, 0);
             }
             else
             {
-                _SG_Int(1575004, id);
-                _SG_Int(1574587, 1);
+                _SG_Int(1575015/*1575004*/, id);
+                _SG_Int(1574589/*1574587*/, 1);
                 Thread.Sleep(200);
-                _SG_Int(1574587, 0);
+                _SG_Int(1574589/*1574587*/, 0);
             }
         }
 
@@ -2730,14 +2730,14 @@ namespace GTAVCSMM
 
         public static void setStat(string stat, int value)
         {
-            long oldhash = _GG_Int(1655444 + 4);
-            long oldvalue = _GG_Int(1020252 + 5526);
-            _SG_Int(1655444 + 4, (int)JOAAT.GetHashKey(stat));
-            _SG_Int(1020252 + 5526, value);
-            _SG_Int(1644209 + 1139, -1);
+            long oldhash = _GG_Int(1659575+4);//1655444 + 4
+            long oldvalue = _GG_Int(1020252+5526);//1020252 + 5526);
+            _SG_Int(1659575+4/*1655444 + 4*/, (int)JOAAT.GetHashKey(stat));
+            _SG_Int(1020252+5526/*1020252 + 5526*/, value);
+            _SG_Int(1648034+1139/*1644209 + 1139*/, -1);
             Thread.Sleep(1000);
-            _SG_Int(1655444 + 4, (int)oldhash);
-            _SG_Int(1020252 + 5526, (int)oldvalue);
+            _SG_Int(1659575+4/*1655444 + 4*/, (int)oldhash);
+            _SG_Int(1020252+5526/*1020252 + 5526*/, (int)oldvalue);
         }
         public static long GetLocalScript(string name)
         {
@@ -2840,6 +2840,14 @@ namespace GTAVCSMM
             _SG_Int(offsets.oVMCreate + 27 + 15, weapon1); // primary weapon
             _SG_Int(offsets.oVMCreate + 27 + 20, weapon2); // primary weapon
             // _SG_Int(offsets.oVMCreate + 27 + 1, "FCK4FD"); // License plate
+            _SG_Int(offsets.oVMCreate + 27 + 19, -1)
+            _SG_Int(offsets.oVMCreate + 27 + 21, 3)  //-- Engine (0-3)
+            _SG_Int(offsets.oVMCreate + 27 + 22, 3)
+            _SG_Int(offsets.oVMCreate + 27 + 23, 9)
+            _SG_Int(offsets.oVMCreate + 27 + 25, 8) //-- suspension (0-13)
+            _SG_Int(offsets.oVMCreate + 27 + 24, 58)
+            _SG_Int(offsets.oVMCreate + 27 + 69, -1) //-- Wheel type
+            _SG_Int(offsets.oVMCreate + 27 + 33, -1) //-- Wheel Selection
         }
         public static string ShowDialog(string text, string caption)
         {
