@@ -2515,26 +2515,12 @@ namespace GTAVCSMM
 
         public static void LoadSession(int id)
         {
-            if (id == -1)
+            Task.Run(() =>
             {
-                _SG_Int(1574589+2/*1574587*/ + 2, -1);
-                _SG_Int(1574589/*1574587*/, 1);
-                Thread.Sleep(200);
-                _SG_Int(1574589/*1574587*/, 0);
-            }
-            else if (id == -2)
-            {
-                _SG_Int(1574589/*1574587*/ + 2, 1);
-                Thread.Sleep(200);
-                _SG_Int(1574589/*1574587*/, 0);
-            }
-            else
-            {
-                _SG_Int(1575015/*1575004*/, id);
-                _SG_Int(1574589/*1574587*/, 1);
-                Thread.Sleep(200);
-                _SG_Int(1574589/*1574587*/, 0);
-            }
+                _SG_Int(1575015, id);
+                _SG_Int(1574589 + 2, id == -1 ? -1 : 0);
+                _SG_Int(1574589, 1);
+            });
         }
 
         public static void getLuckyWheelPrice(int id)
@@ -2748,14 +2734,14 @@ namespace GTAVCSMM
 
         public static void setStat(string stat, int value)
         {
-            long oldhash = _GG_Int(1659575+4);//1655444 + 4
-            long oldvalue = _GG_Int(1020252+5526);//1020252 + 5526);
-            _SG_Int(1659575+4/*1655444 + 4*/, (int)JOAAT.GetHashKey(stat));
-            _SG_Int(1020252+5526/*1020252 + 5526*/, value);
-            _SG_Int(1648034+1139/*1644209 + 1139*/, -1);
+            long oldhash = _GG_Int(1659575+4);
+            long oldvalue = _GG_Int(1020252+5526);
+            _SG_Int(1659575+4, (int)JOAAT.GetHashKey(stat));
+            _SG_Int(1020252+5526, value);
+            _SG_Int(1648034+1139, -1);
             Thread.Sleep(1000);
-            _SG_Int(1659575+4/*1655444 + 4*/, (int)oldhash);
-            _SG_Int(1020252+5526/*1020252 + 5526*/, (int)oldvalue);
+            _SG_Int(1659575+4, (int)oldhash);
+            _SG_Int(1020252+5526, (int)oldvalue);
         }
         #endregion
         public static long GetLocalScript(string name)
@@ -2891,6 +2877,18 @@ namespace GTAVCSMM
             prompt.TopMost = true;
 
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+        }
+
+        public static void set_nightclub_produce_time(int produce_time, bool toggle)
+        {
+            // Time to Produce
+            _SG_Int(262145 + 24135, toggle ? produce_time : 4800000);   // Sporting Goods
+            _SG_Int(262145 + 24136, toggle ? produce_time : 14400000);  // South American Imports
+            _SG_Int(262145 + 24137, toggle ? produce_time : 7200000);   // Pharmaceutical Research
+            _SG_Int(262145 + 24138, toggle ? produce_time : 2400000);   // Organic Produce
+            _SG_Int(262145 + 24139, toggle ? produce_time : 1800000);   // Printing and Copying
+            _SG_Int(262145 + 24140, toggle ? produce_time : 3600000);   // Cash Creation
+            _SG_Int(262145 + 24141, toggle ? produce_time : 8400000);   // Cargo and Shipments
         }
 
         public static void empty_session()
