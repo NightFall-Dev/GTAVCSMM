@@ -857,7 +857,7 @@
                 return _oCountermeasures;
             }
         }
-		//
+	//
         public int oTampaMissles
         {
             get
@@ -872,7 +872,7 @@
                 return _oTampa3CarMKMortar;
             }
         }
-        public int _oKhankali1
+        public int oKhankali1
         {
             get
             {
