@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;//Suspend process Empty session
 using System.Windows.Forms;
 
 namespace GTAVCSMM
@@ -83,7 +82,7 @@ namespace GTAVCSMM
         public static Patterns pattern = new Patterns();
         public static TSettings settings = new TSettings();
         public static Mem Mem;
-        //public static Thread _freezeGame;
+        public static Thread _freezeGame;
 
         public static System.Windows.Forms.Timer ProcessTimer = new System.Windows.Forms.Timer();
         public static System.Windows.Forms.Timer MemoryTimer = new System.Windows.Forms.Timer();
@@ -391,25 +390,25 @@ namespace GTAVCSMM
                 }
                 else
                 {
-                    MessageBox.Show("Grand Theft Auto V is not Running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("GTA is not Running!", "Serious Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Quit();
                 }
             }
             catch
             {
-                MessageBox.Show("Grand Theft Auto V is not Running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("GTA is not Running!", "Serious Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Quit();
             }
         }
 
-        /*public static void freezeGame()
+        public static void freezeGame()
         {
             Console.WriteLine("Freezing game");
             Speeder.Suspend(settings.gameProcess);
             Thread.Sleep(10000);
             Speeder.Resume(settings.gameProcess);
             _freezeGame.Abort();
-        }*/
+        }
         #endregion
 
 
@@ -503,7 +502,7 @@ namespace GTAVCSMM
             // 
             listBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             listBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            listBx.Font = new System.Drawing.Font("Tahoma", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            listBx.Font = new System.Drawing.Font("Arial", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             listBx.FormattingEnabled = true;
             listBx.ItemHeight = 24;
             listBx.Location = new System.Drawing.Point(6, 50);
@@ -518,7 +517,7 @@ namespace GTAVCSMM
             // 
             label1.AutoSize = true;
             label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            label1.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label1.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             label1.Location = new System.Drawing.Point(1, 9);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(168, 33);
@@ -542,12 +541,12 @@ namespace GTAVCSMM
             // 
             // ProcessTimer
             // 
-            ProcessTimer.Interval = 500;
+            ProcessTimer.Interval = 100;
             ProcessTimer.Tick += new System.EventHandler(ProcessTimer_Tick);
             // 
             // MemoryTimer
             // 
-            MemoryTimer.Interval = 500;
+            MemoryTimer.Interval = 100;
             MemoryTimer.Tick += new System.EventHandler(MemoryTimer_Tick);
             // 
             // Form1
@@ -1010,8 +1009,6 @@ namespace GTAVCSMM
 
         public static void runitem(int mainMenulevel, int menulevel, int menuItem)
         {
-            int[] tpIdArray;// Add tpIdArray
-            int[] tpColArray;// Add tpColArray
             Console.WriteLine("Command to run: " + mainMenulevel + " " + menulevel + " " + menuItem);
             switch (mainMenulevel)
             {
@@ -1086,7 +1083,8 @@ namespace GTAVCSMM
                                     break;
                                 case 4:
                                     Activate();
-                                    empty_session();
+                                    _freezeGame = new Thread(freezeGame) { IsBackground = true };
+                                    _freezeGame.Start();
                                     break;
                                 case 5:
                                     Activate();
@@ -2507,12 +2505,26 @@ namespace GTAVCSMM
 
         public static void LoadSession(int id)
         {
-            Task.Run(() =>
+            if (id == -1)
             {
-                _SG_Int(1575015, id);
-                _SG_Int(1574589 + 2, id == -1 ? -1 : 0);
-                _SG_Int(1574589, 1);
-            });
+                _SG_Int(1574589+2/*1574587*/ + 2, -1);
+                _SG_Int(1574589/*1574587*/, 1);
+                Thread.Sleep(200);
+                _SG_Int(1574589/*1574587*/, 0);
+            }
+            else if (id == -2)
+            {
+                _SG_Int(1574589/*1574587*/ + 2, 1);
+                Thread.Sleep(200);
+                _SG_Int(1574589/*1574587*/, 0);
+            }
+            else
+            {
+                _SG_Int(1575015/*1575004*/, id);
+                _SG_Int(1574589/*1574587*/, 1);
+                Thread.Sleep(200);
+                _SG_Int(1574589/*1574587*/, 0);
+            }
         }
 
         public static void getLuckyWheelPrice(int id)
@@ -2564,9 +2576,15 @@ namespace GTAVCSMM
         private static void teleportBlip(int[] ID, int[] color, int height = 0)
         {
             Location tmpLoc = getBlipCoords(ID, color, height);
-            if (tmpLoc.x != 0 && tmpLoc.y != 0)
+            Location returnLoc = new Location
             {
-                Teleport(tmpLoc);
+                x = tmpLoc.x,
+                y = tmpLoc.y,
+                z = tmpLoc.z
+            };
+            if (returnLoc.x != 0 && returnLoc.y != 0)
+            {
+                Teleport(returnLoc);
             }
             else
             {
@@ -2577,7 +2595,7 @@ namespace GTAVCSMM
         private static Location getBlipCoords(int[] id, int[] color = null, int height = 0)
         {
             float zOffset = 0;
-            Location tempLocation = new Location() { };
+            Location tempLocation = new() { };
             for (int i = 2000; i > 1; i--)
             {
                 long blip = settings.BlipPTR + (i * 8);
@@ -2606,12 +2624,12 @@ namespace GTAVCSMM
             }
             if (tempLocation.z == 20)
             {
-                tempLocation.z = -255.0f;
-            } else
-            {
-                tempLocation.z = tempLocation.z + zOffset;
+                tempLocation.z = -255;
             }
-
+            tempLocation.z = tempLocation.z + zOffset;
+            if (tempLocation.x > 0) { tempLocation.x = (float)Math.Round(tempLocation.x, 3); }
+            if (tempLocation.y > 0) { tempLocation.y = (float)Math.Round(tempLocation.y, 3); }
+            if (tempLocation.z > 0) { tempLocation.y = (float)Math.Round(tempLocation.z, 3); }
             Console.WriteLine("New location: " + tempLocation.x + ", " + tempLocation.y + ", " + tempLocation.z);
             return new Location { x = tempLocation.x, y = tempLocation.y, z = tempLocation.z };
         }
@@ -2671,22 +2689,17 @@ namespace GTAVCSMM
                 Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCVehicle, offsets.oVisualZ }, value);
             }
         }
-        #EndRegion
+        #endregion
 
         #region Global Addresses function
-        public static T GG<T>(int index) where T : struct { return Mem.Read<T>(GA(index)); }
-
-        public static void SG<T>(int index, T vaule) where T : struct { Mem.Write<T>(GA(index), vaule); }
-        
-        public static long GA(int Index)
+        public static long GA(long Index)
         {
             long p = settings.GlobalPTR + (8 * (Index >> 0x12 & 0x3F));
             long p_ga = Mem.ReadPointer(p, null);
             long p_ga_final = p_ga + (8 * (Index & 0x3FFFF));
             return p_ga_final;
         }
-
-        public static int _GG_Int(int Index)
+        public static long _GG_Int(int Index)
         {
             return Mem.ReadInt(GA(Index), null);
         }
@@ -2715,7 +2728,17 @@ namespace GTAVCSMM
             Mem.Write(GA(Index), null, value);
         }
 
-        #endregion
+        public static void setStat(string stat, int value)
+        {
+            long oldhash = _GG_Int(1659575+4);//1655444 + 4
+            long oldvalue = _GG_Int(1020252+5526);//1020252 + 5526);
+            _SG_Int(1659575+4/*1655444 + 4*/, (int)JOAAT.GetHashKey(stat));
+            _SG_Int(1020252+5526/*1020252 + 5526*/, value);
+            _SG_Int(1648034+1139/*1644209 + 1139*/, -1);
+            Thread.Sleep(1000);
+            _SG_Int(1659575+4/*1655444 + 4*/, (int)oldhash);
+            _SG_Int(1020252+5526/*1020252 + 5526*/, (int)oldvalue);
+        }
         public static long GetLocalScript(string name)
         {
             int size = name.Length;
@@ -2732,7 +2755,8 @@ namespace GTAVCSMM
             }
             return 0;
         }
-		// Create Vehicle Function
+        #endregion
+
         public static void carSpawn(string Hash, int pegasus = 0)
         {
             string model = Hash.ToLower();
@@ -2745,7 +2769,6 @@ namespace GTAVCSMM
             spawner_x = spawner_x - (ped_heading2 * 5f);
             spawner_y = spawner_y + (ped_heading * 5f);
             spawner_z = spawner_z + 0.5f;
-			
             _SG_Float(offsets.oVMCreate + 7 + 0, spawner_x);
             _SG_Float(offsets.oVMCreate + 7 + 1, spawner_y);
             _SG_Float(offsets.oVMCreate + 7 + 2, spawner_z);
@@ -2760,8 +2783,7 @@ namespace GTAVCSMM
             _SG_Int(offsets.oVMCreate + 27 + 74, 1); // Red Neon Amount 1-255 100%-0%
             _SG_Int(offsets.oVMCreate + 27 + 75, 1); // Green Neon Amount 1-255 100%-0%
             _SG_Int(offsets.oVMCreate + 27 + 76, 0); // Blue Neon Amount 1-255 100%-0%
-            _SG_UInt(offsets.oVMCreate + 27 + 60, 1); // landinggear 
-			_SG_Int(offsets.oVMCreate + 27 + 77, 4030726305)// vehstate
+            _SG_UInt(offsets.oVMCreate + 27 + 60, 4030726305); // landinggear / vehstate
             _SG_Int(offsets.oVMCreate + 27 + 5, -1); // default paintjob primary -1 auto 120
             _SG_Int(offsets.oVMCreate + 27 + 6, -1); // default paintjob secondary -1 auto 120
             _SG_Int(offsets.oVMCreate + 27 + 7, -1);
@@ -2779,38 +2801,44 @@ namespace GTAVCSMM
             _SG_Int(offsets.oVMCreate + 27 + 25, 8); // Suspension(0 - 13)
             _SG_Int(offsets.oVMCreate + 27 + 19, -1);
             Mem.writeInt(GA(offsets.oVMCreate + 27 + 77) + 1, null, 2); // 2:bulletproof 0:false
-			
-            int whichWpn = 2;
-            int whichWpn2 = 2;
 
+            int weapon1 = 2;
+            int weapon2 = 1;
 
-            if (model == "vigilante" || model == "oppressor")
+            if (model == "oppressor2")
             {
-				whichWpn = 1;
-                whichWpn2 = 1;
+                weapon1 = 2;
             }
-            if (model == "apc" || model == "deluxo")
+            else if (model == "apc")
             {
-				whichWpn = 1;
-                whichWpn2 = 1;
+                weapon1 = -1;
             }
-            if (model == "bombushka")
+            else if (model == "deluxo")
             {
-				whichWpn = 1;
-                whichWpn2 = 1;
+                weapon1 = -1;
             }
-            if (model == "tampa3" || model == "insurgent3" || model == "halftrack" )
+            else if (model == "bombushka")
             {
-				whichWpn = 3;
-                whichWpn2 = 3;
+                weapon1 = 1;
             }
-            if (model == "barrage")
+            else if (model == "tampa3")
             {
-				whichWpn = 30;
-                whichWpn2 = 30;
+                weapon1 = 3;
             }
-            _SG_Int(offsets.oVMCreate + 27 + 15, whichWpn); // primary weapon
-            _SG_Int(offsets.oVMCreate + 27 + 20, whichWpn2); // primary weapon
+            else if (model == "insurgent3")
+            {
+                weapon1 = 3;
+            }
+            else if (model == "halftrack")
+            {
+                weapon1 = 3;
+            }
+            else if (model == "barrage")
+            {
+                weapon1 = 30;
+            }
+            _SG_Int(offsets.oVMCreate + 27 + 15, weapon1); // primary weapon
+            _SG_Int(offsets.oVMCreate + 27 + 20, weapon2); // primary weapon
             // _SG_Int(offsets.oVMCreate + 27 + 1, "FCK4FD"); // License plate
             _SG_Int(offsets.oVMCreate + 27 + 19, -1);
             _SG_Int(offsets.oVMCreate + 27 + 21, 3);  //-- Engine (0-3)
@@ -2847,16 +2875,6 @@ namespace GTAVCSMM
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
 
-        public static void empty_session()
-        {
-            Task.Run(() =>
-            {
-                ProcessMgr.SuspendProcess(settings.gameProcess);
-                Task.Delay(10000).Wait();
-                ProcessMgr.ResumeProcess(settings.gameProcess);
-            });
-        }
     }
-
     struct Location { public float x, y, z; }
 }
