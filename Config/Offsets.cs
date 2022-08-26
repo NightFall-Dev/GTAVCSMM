@@ -144,7 +144,7 @@
         private int _pCPedWeaponManager = 0x10D8;
         private int _oSeatbelt = 0x145C; // byte 55:false 56:true
         //private int _oInVehicle = 0x1618; // int 16:false 0:true (perhaps 0xE52)
-		private int _oInVehicle = 0x14C7 // int 16:false 0:true
+	private int _oInVehicle = 0x14C7; // int 16:false 0:true
         private int _pedArmor = 0x1530; // float, 50: Online 100:Story Mode
 
         public int oEntityType
