@@ -462,9 +462,9 @@
         private int _oMaxAmmo = 0x28;
         private int _pCAmmo = 0x0;
         private int _oCurrentAmmo = 0x18;
-		//
-		private int _pCWeaponInventory = 0x10D0;
-		private int _oAmmoModifier = 0x78;
+	//
+	//private int _pCWeaponInventory = 0x10D0;
+	//private int _oAmmoModifier = 0x78;
         public int pCWeaponInfo
         {
             get
@@ -633,8 +633,8 @@
                 return _oCurrentAmmo;
             }
         }
-		//
-        public int pCWeaponInventory
+	//
+        /*public int pCWeaponInventory
         {
             get
             {
@@ -647,7 +647,7 @@
             {
                 return _oAmmoModifier;
             }
-        }
+        }*/
         #endregion
 
         #region CVehicle Offsets       
@@ -677,7 +677,7 @@
         private int _oMk2Missiles = 0x12A4; // int
         private int _oAircraftBomb = 0x12B4;
         private int _oCountermeasures = 0x12B8;
-		//
+	//
         private int _oTampaMissles = 0x129C;
         private int _oTampa3CarMKMortar = 0x12A0;
         private int _oKhankali1 = 0x12A8;
