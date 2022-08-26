@@ -1,0 +1,53 @@
+name: Build GTAVCSMM
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Build
+    outputs:
+      full_sha: ${{ steps.var.outputs.full_sha }}
+      short_sha: ${{ steps.var.outputs.short_sha }}
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+          submodules: recursive
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build 64bit release
+      run: |
+        msbuild /p:Configuration=Release /p:Platform=x64 GTAVCSMM.sln /warnaserror
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+       name: binary
+       path: |
+            bin/x64/Release/GTAVCSMM.exe
+
+    - name: Generate Build Info
+      id: var
+      run: |
+          echo "::set-output name=full_sha::$(git rev-parse HEAD)"
+          echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
+
+  check_detections:
+    runs-on: ubuntu-latest
+    name: Check for detections in Binary and notify if necesarry
+    needs: build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: binary
+
+      - name: Test file for detected bits
+        id: detections
+        uses: Yimura/gtav-sigscan-action@v0.0.3
+        with:
+          file: ./GTAVCSMM.exe
