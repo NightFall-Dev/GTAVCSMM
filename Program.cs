@@ -94,7 +94,17 @@ namespace GTAVCSMM
         #region PROCESS INFO
         private static bool bGodMode = false;
         private static bool bgodState = false;
+        private static bool bNeverWanted = false;
+        private static bool bNoRagdoll = false;
+        private static bool bUndeadOffRadar = false;
+        private static bool bSeatBelt = false;
+        private static bool bSuperJump = false;
+        private static bool bExplosiveAmmo = false;
+        private static bool bDisableCollision = false;
+        private static bool bVehicleGodMode = false;
         private static int frameFlagCount = 0;
+        private static bool bGetCasinoPrice = false;
+        private static int casinoPrice = 0;
 
         [DllImport("user32.dll")]
         static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
@@ -123,6 +133,198 @@ namespace GTAVCSMM
                     settings.pgodm = false;
                     Deactivate();
                 }
+            }
+        }
+
+        public static void pNEVERWANTED()
+        {
+            if (bNeverWanted)
+            {
+                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 0);
+                if (!settings.pnwanted)
+                {
+                    Activate();
+                }
+                settings.pnwanted = true;
+            }
+            else
+            {
+                if (settings.pnwanted)
+                {
+                    settings.pnwanted = false;
+                    Deactivate();
+                }
+            }
+        }
+
+        public static void pNORAGDOLL()
+        {
+            if (bNoRagdoll)
+            {
+                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oRagdoll }, 1);
+                if (!settings.pnragdoll)
+                {
+                    Activate();
+                }
+                settings.pnragdoll = true;
+            }
+            else
+            {
+                if (settings.pnragdoll)
+                {
+                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oRagdoll }, 32);
+                    settings.pnragdoll = false;
+                    Deactivate();
+                }
+            }
+        }
+
+        public static void pUNDEADOFFRADAR()
+        {
+            if (bUndeadOffRadar)
+            {
+                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oHealthMax }, 0);
+                if (!settings.puoffradar)
+                {
+                    Activate();
+                }
+                settings.puoffradar = true;
+            }
+            else
+            {
+                if (settings.puoffradar)
+                {
+                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oHealthMax }, 328f);
+                    settings.puoffradar = false;
+                    Deactivate();
+                }
+            }
+        }
+
+        public static void pSEATBELT()
+        {
+            if (bSeatBelt)
+            {
+                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oSeatbelt }, -55);
+                if (!settings.psbelt)
+                {
+                    Activate();
+                }
+                settings.psbelt = true;
+            }
+            else
+            {
+                if (settings.psbelt)
+                {
+                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oSeatbelt }, -56);
+                    settings.psbelt = false;
+                    Deactivate();
+                }
+            }
+        }
+
+        public static void pSUPERJUMP()
+        {
+            if (bSuperJump)
+            {
+                if (!settings.psjump)
+                {
+                    frameFlagCount = frameFlagCount + 64;
+                    Activate();
+                }
+                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
+                settings.psjump = true;
+            }
+            else
+            {
+                if (settings.psjump)
+                {
+                    frameFlagCount = frameFlagCount - 64;
+                    Deactivate();
+                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
+                    settings.psjump = false;
+                }
+            }
+        }
+
+        public static void pEXPLOSIVEAMMO()
+        {
+            if (bExplosiveAmmo)
+            {
+                if (!settings.psexammo)
+                {
+                    frameFlagCount = frameFlagCount + 8;
+                    Activate();
+                }
+                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
+                settings.psexammo = true;
+            }
+            else
+            {
+                if (settings.psexammo)
+                {
+                    frameFlagCount = frameFlagCount - 8;
+                    Deactivate();
+                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
+                    settings.psexammo = false;
+                }
+            }
+        }
+        public static void pDISABLECOLLISION()
+        {
+            long paddr = Mem.ReadPointer(settings.WorldPTR, new int[] { offsets.pCPed, 0x30, 0x10, 0x20, 0x70, 0x0 });
+            long paddr2 = Mem.GetPtrAddr(paddr + 0x2C, null);
+
+            if (bDisableCollision)
+            {
+                Mem.writeFloat(paddr2, null, -1.0f);
+                if (!settings.pdiscol)
+                {
+                    Activate();
+                }
+                settings.pdiscol = true;
+            }
+            else
+            {
+                if (settings.pdiscol)
+                {
+                    Mem.writeFloat(paddr2, null, 0.25f);
+                    settings.pdiscol = false;
+                    Deactivate();
+                }
+            }
+        }
+        public static void vGODMODE()
+        {
+            long paddr = Mem.ReadPointer(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCVehicle });
+            if (paddr > 0)
+            {
+                long paddr2 = Mem.GetPtrAddr(paddr + offsets.oGod, null);
+                if (bVehicleGodMode)
+                {
+                    Mem.writeInt(paddr2, null, 1);
+                    if (!settings.vgodm)
+                    {
+                        Activate();
+                    }
+                    settings.vgodm = true;
+                }
+                else
+                {
+                    if (settings.vgodm)
+                    {
+                        Mem.writeInt(paddr2, null, 0);
+                        settings.vgodm = false;
+                        Deactivate();
+                    }
+                }
+            }
+        }
+        public static void cPRICE()
+        {
+            if (bGetCasinoPrice)
+            {
+                getLuckyWheelPrice(casinoPrice);
             }
         }
 
@@ -221,11 +423,19 @@ namespace GTAVCSMM
         private static void MemoryTimer_Tick(object sender, EventArgs e)
         {
             pGODMODE();
+            pNEVERWANTED();
+            pNORAGDOLL();
+            pUNDEADOFFRADAR();
+            pSEATBELT();
+            pDISABLECOLLISION();
+            vGODMODE();
         }
 
         private static void fastTimer_Tick(object sender, EventArgs e)
         {
-
+            pSUPERJUMP();
+            pEXPLOSIVEAMMO();
+            cPRICE();
         }
 
         #endregion
@@ -407,8 +617,8 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 0:
-                            listBx.Items.Add("Refresh");
-                            listBx.Items.Add("Exit");
+                            listBx.Items.Add("Re-Init");
+                            listBx.Items.Add("Quit (Del)");
 
                             menuMainLvl = 1;
                             menuLvl = 0;
@@ -444,6 +654,17 @@ namespace GTAVCSMM
 
                         case 2:
                             listBx.Items.Add("God Mode (F6)");
+                            listBx.Items.Add("Super Jump");
+                            listBx.Items.Add("Never Wanted (F7)");
+                            listBx.Items.Add("Seatbelt");
+                            listBx.Items.Add("No Ragdoll");
+                            listBx.Items.Add("Undead Off-Radar");
+                            listBx.Items.Add("Disable Collision");
+                            listBx.Items.Add("Skills \t\t\t ►");
+                            listBx.Items.Add("Swim Speed \t\t ►");
+                            listBx.Items.Add("Stealth Speed \t\t ►");
+                            listBx.Items.Add("Run Speed \t\t ►");
+                            listBx.Items.Add("Wanted Level \t\t ►");
 
                             menuMainLvl = 1;
                             menuLvl = 2;
@@ -465,9 +686,8 @@ namespace GTAVCSMM
                             break;
 
                         case 4:
-                            listBx.Items.Add("To Waypoint");
-                            listBx.Items.Add("To Objective");
-                            listBx.Items.Add("Locations \t\t ►");
+                            listBx.Items.Add("Explosive Ammo");
+                            listBx.Items.Add("Long Range");
 
                             menuMainLvl = 1;
                             menuLvl = 4;
@@ -478,8 +698,9 @@ namespace GTAVCSMM
                             break;
 
                         case 5:
-                            listBx.Items.Add("Quick Car Spawn \t\t ►");
-                            listBx.Items.Add("Manual Car Spawn \t\t ►");
+                            listBx.Items.Add("Waypoint (F8)");
+                            listBx.Items.Add("Objective");
+                            listBx.Items.Add("Locations \t\t ►");
 
                             menuMainLvl = 1;
                             menuLvl = 5;
@@ -488,6 +709,33 @@ namespace GTAVCSMM
                             LastMenuLvl = 1;
                             LastMenuItm = 5;
                             break;
+
+                        case 6:
+                            listBx.Items.Add("RP Multipler \t\t ►");
+                            listBx.Items.Add("REP Multipler \t\t ►");
+                            listBx.Items.Add("Nightclub Popularity");
+
+                            menuMainLvl = 1;
+                            menuLvl = 6;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 6;
+                            break;
+
+                        case 7:
+                            listBx.Items.Add("Get Lucky Wheel Price \t ►");
+                            listBx.Items.Add("Trigger Nightclub Production \t ►");
+                            listBx.Items.Add("Quick Car Spawn \t\t ►");
+                            listBx.Items.Add("Manual Car Spawn \t\t ►");
+
+                            menuMainLvl = 1;
+                            menuLvl = 7;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 7;
+                            break;
                     }
                     break;
 
@@ -495,6 +743,86 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 7:
+                            listBx.Items.Add("Stamina");
+                            listBx.Items.Add("Strength");
+                            listBx.Items.Add("Lung Capacity");
+                            listBx.Items.Add("Driving");
+                            listBx.Items.Add("Flying");
+                            listBx.Items.Add("Shooting");
+                            listBx.Items.Add("Stealth");
+
+                            menuMainLvl = 2;
+                            menuLvl = 7;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 2;
+                            LastMenuItm = 7;
+                            break;
+
+                        case 8:
+                            listBx.Items.Add("Swim Speed = 0.0");
+                            listBx.Items.Add("Swim Speed = 0.5");
+                            listBx.Items.Add("Swim Speed = 1.0 (Default)");
+                            listBx.Items.Add("Swim Speed = 1.5");
+                            listBx.Items.Add("Swim Speed = 2.0");
+                            listBx.Items.Add("Swim Speed = 2.5");
+                            listBx.Items.Add("Swim Speed = 3.0");
+                            listBx.Items.Add("Swim Speed = 3.5");
+                            listBx.Items.Add("Swim Speed = 4.0");
+                            listBx.Items.Add("Swim Speed = 4.5");
+                            listBx.Items.Add("Swim Speed = 5.0");
+
+                            menuMainLvl = 2;
+                            menuLvl = 8;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 2;
+                            LastMenuItm = 8;
+                            break;
+
+                        case 9:
+                            listBx.Items.Add("Stealth Speed = 0.0");
+                            listBx.Items.Add("Stealth Speed = 0.5");
+                            listBx.Items.Add("Stealth Speed = 1.0 (Default)");
+                            listBx.Items.Add("Stealth Speed = 1.5");
+                            listBx.Items.Add("Stealth Speed = 2.0");
+                            listBx.Items.Add("Stealth Speed = 2.5");
+                            listBx.Items.Add("Stealth Speed = 3.0");
+                            listBx.Items.Add("Stealth Speed = 3.5");
+                            listBx.Items.Add("Stealth Speed = 4.0");
+                            listBx.Items.Add("Stealth Speed = 4.5");
+                            listBx.Items.Add("Stealth Speed = 5.0");
+
+                            menuMainLvl = 2;
+                            menuLvl = 9;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 2;
+                            LastMenuItm = 9;
+                            break;
+
+                        case 10:
+                            listBx.Items.Add("Run Speed = 0.0");
+                            listBx.Items.Add("Run Speed = 0.5");
+                            listBx.Items.Add("Run Speed = 1.0 (Default)");
+                            listBx.Items.Add("Run Speed = 1.5");
+                            listBx.Items.Add("Run Speed = 2.0");
+                            listBx.Items.Add("Run Speed = 2.5");
+                            listBx.Items.Add("Run Speed = 3.0");
+                            listBx.Items.Add("Run Speed = 3.5");
+                            listBx.Items.Add("Run Speed = 4.0");
+                            listBx.Items.Add("Run Speed = 4.5");
+                            listBx.Items.Add("Run Speed = 5.0");
+
+                            menuMainLvl = 2;
+                            menuLvl = 10;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 2;
+                            LastMenuItm = 10;
+                            break;
+
+                        case 11:
                             listBx.Items.Add("Wanted Level = 0");
                             listBx.Items.Add("Wanted Level = 1");
                             listBx.Items.Add("Wanted Level = 2");
@@ -557,6 +885,106 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 0:
+                            listBx.Items.Add("RP x 1.0");
+                            listBx.Items.Add("RP x 2.0");
+                            listBx.Items.Add("RP x 3.0");
+                            listBx.Items.Add("RP x 5.0");
+                            listBx.Items.Add("RP x 10.0");
+                            listBx.Items.Add("RP x 15.0");
+                            listBx.Items.Add("RP x 20.0");
+                            listBx.Items.Add("RP x 25.0");
+                            listBx.Items.Add("RP x 30.0");
+                            listBx.Items.Add("RP x 35.0");
+                            listBx.Items.Add("RP x 40.0");
+                            listBx.Items.Add("RP x 50.0");
+                            listBx.Items.Add("RP x 100.0");
+
+                            menuMainLvl = 6;
+                            menuLvl = 0;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 6;
+                            LastMenuItm = 0;
+                            break;
+
+                        case 1:
+                            listBx.Items.Add("REP x 1.0");
+                            listBx.Items.Add("REP x 2.0");
+                            listBx.Items.Add("REP x 3.0");
+                            listBx.Items.Add("REP x 5.0");
+                            listBx.Items.Add("REP x 10.0");
+                            listBx.Items.Add("REP x 15.0");
+                            listBx.Items.Add("REP x 20.0");
+                            listBx.Items.Add("REP x 25.0");
+                            listBx.Items.Add("REP x 30.0");
+                            listBx.Items.Add("REP x 35.0");
+                            listBx.Items.Add("REP x 40.0");
+                            listBx.Items.Add("REP x 50.0");
+                            listBx.Items.Add("REP x 100.0");
+                            listBx.Items.Add("REP x 200.0");
+                            listBx.Items.Add("REP x 300.0");
+                            listBx.Items.Add("REP x 500.0");
+                            listBx.Items.Add("REP x 1000.0");
+
+                            menuMainLvl = 6;
+                            menuLvl = 1;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 6;
+                            LastMenuItm = 1;
+                            break;
+                    }
+                    break;
+
+                case 7:
+                    switch (menulevel)
+                    {
+                        case 0:
+                            listBx.Items.Add("Clothes (0)");
+                            listBx.Items.Add("RP (1)");
+                            listBx.Items.Add("Cash (1)");
+                            listBx.Items.Add("Chips (1)");
+                            listBx.Items.Add("Discount");
+                            listBx.Items.Add("RP (2)");
+                            listBx.Items.Add("Cash (2)");
+                            listBx.Items.Add("Chips (2)");
+                            listBx.Items.Add("Clothes (2)");
+                            listBx.Items.Add("RP (3)");
+                            listBx.Items.Add("Chips (3)");
+                            listBx.Items.Add("Mystery Price");
+                            listBx.Items.Add("Clothes (3)");
+                            listBx.Items.Add("RP (4)");
+                            listBx.Items.Add("Chips (4)");
+                            listBx.Items.Add("Clothes (4)");
+                            listBx.Items.Add("RP (5)");
+                            listBx.Items.Add("Podium Vehicle");
+
+                            menuMainLvl = 7;
+                            menuLvl = 0;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 7;
+                            LastMenuItm = 0;
+                            break;
+
+                        case 1:
+                            listBx.Items.Add("South American Imports");
+                            listBx.Items.Add("Pharmaceutical Research");
+                            listBx.Items.Add("Organic Produce");
+                            listBx.Items.Add("Printing and Copying");
+                            listBx.Items.Add("Cash Creation");
+                            listBx.Items.Add("Sporting Goods");
+                            listBx.Items.Add("Cargo and Shipments");
+
+                            menuMainLvl = 7;
+                            menuLvl = 1;
+
+                            LastMenuMainLvl = 1;
+                            LastMenuLvl = 7;
+                            LastMenuItm = 1;
+                            break;
+
+                        case 2:
                             listBx.Items.Add("ZR380");
                             listBx.Items.Add("Deluxo");
                             listBx.Items.Add("Opressor2");
@@ -684,6 +1112,1242 @@ namespace GTAVCSMM
                                     Activate();
                                     LoadSession(2);
                                     break;
+                                    /*
+                                case 11:
+                                    Activate();
+                                    LoadSession(-2);
+                                    break;
+                                    */
+                            }
+                            break;
+                        case 2:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    bGodMode = !bGodMode;
+                                    break;
+                                case 1:
+                                    bSuperJump = !bSuperJump;
+                                    break;
+                                case 2:
+                                    bNeverWanted = !bNeverWanted;
+                                    break;
+                                case 3:
+                                    bSeatBelt = !bSeatBelt;
+                                    break;
+                                case 4:
+                                    bNoRagdoll = !bNoRagdoll;
+                                    break;
+                                case 5:
+                                    bUndeadOffRadar = !bUndeadOffRadar;
+                                    break;
+                                case 6:
+                                    bDisableCollision = !bDisableCollision;
+                                    break;
+                                case 7:
+                                    listboxFill(2, 7);
+                                    break;
+                                case 8:
+                                    listboxFill(2, 8);
+                                    break;
+                                case 9:
+                                    listboxFill(2, 9);
+                                    break;
+                                case 10:
+                                    listboxFill(2, 10);
+                                    break;
+                                case 11:
+                                    listboxFill(2, 11);
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    bVehicleGodMode = !bVehicleGodMode;
+                                    break;
+                            }
+                            break;
+                        case 4:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    bExplosiveAmmo = !bExplosiveAmmo;
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oRange }, 250F);
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oLockRange }, 250F);
+                                    break;
+                            }
+                            break;
+                        case 5:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    Activate();
+                                    int[] tpIdArray = new int[] { 8 };
+                                    int[] tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray, 20);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 1:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 1 };
+                                    tpColArray = new int[] { 5, 60, 66 };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 2:
+                                    listboxFill(5, 2);
+                                    break;
+                            }
+                            break;
+                        case 6:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    listboxFill(6, 0);
+                                    break;
+                                case 1:
+                                    listboxFill(6, 1);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    setStat("MP0_CLUB_POPULARITY", 1000);
+                                    setStat("MP1_CLUB_POPULARITY", 1000);
+                                    break;
+                            }
+                            break;
+                        case 7:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    listboxFill(7, 0);
+                                    break;
+                                case 1:
+                                    listboxFill(7, 1);
+                                    break;
+                                case 2:
+                                    listboxFill(7, 2);
+                                    break;
+                                case 3:
+                                    new Thread(() =>
+                                    {
+                                        Thread.CurrentThread.IsBackground = true;
+                                        string promptValue = ShowDialog("Enter the name like \"opressor2\" without the quotes.", "Enter car name!");
+                                        if (promptValue != "")
+                                        {
+                                            Activate();
+                                            carSpawn(promptValue, 0);
+                                        }
+                                    }).Start();
+                                    break;
+                            }
+                            break;
+
+                    }
+                    break;
+                case 2:
+                    switch (menulevel)
+                    {
+                        case 7:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_STAM", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_STAM", 100);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_STRN", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_STRN", 100);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_LUNG", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_LUNG", 100);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_DRIV", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_DRIV", 100);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_FLY", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_FLY", 100);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_SHO", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_SHO", 100);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    setStat("MP0_SCRIPT_INCREASE_STL", 100);
+                                    setStat("MP1_SCRIPT_INCREASE_STL", 100);
+                                    break;
+                            }
+                            break;
+
+                        case 8:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 0.0f);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 0.5f);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 1.0f);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 1.5f);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 2.0f);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 2.5f);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 3.0f);
+                                    break;
+                                case 7:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 3.5f);
+                                    break;
+                                case 8:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 4.0f);
+                                    break;
+                                case 9:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 4.5f);
+                                    break;
+                                case 10:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 5.0f);
+                                    break;
+                            }
+                            break;
+
+                        case 9:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 0.0f);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 0.5f);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 1.0f);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 1.5f);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 2.0f);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 2.5f);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 3.0f);
+                                    break;
+                                case 7:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 3.5f);
+                                    break;
+                                case 8:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 4.0f);
+                                    break;
+                                case 9:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 4.5f);
+                                    break;
+                                case 10:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 5.0f);
+                                    break;
+                            }
+                            break;
+
+                        case 10:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 0.0f);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 0.5f);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 1.0f);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 1.5f);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 2.0f);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 2.5f);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 3.0f);
+                                    break;
+                                case 7:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 3.5f);
+                                    break;
+                                case 8:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 4.0f);
+                                    break;
+                                case 9:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 4.5f);
+                                    break;
+                                case 10:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 5.0f);
+                                    break;
+                            }
+                            break;
+
+                        case 11:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 0);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 1);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 2);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 3);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 4);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 5);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 4:
+                    switch (menulevel)
+                    {
+                        case 0:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oImpactType }, 2);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oImpactType }, 3);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oImpactType }, 5);
+                                    break;
+                            }
+                            break;
+
+                        case 1:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oImpactExplosion }, -1);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oImpactExplosion }, 0);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oImpactExplosion }, 59);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 5:
+                    switch (menulevel)
+                    {
+                        case 1:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    int[] tpIdArray = new int[] { 614 };
+                                    int[] tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 1:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 740 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 2:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 475 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 3:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 557 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 4:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 590 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 5:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 569 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 6:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 455 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 7:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 760 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 8:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 64, 427, 478, 423, 501, 556 };
+                                    tpColArray = new int[] { 2, 3 };
+                                    teleportBlip(tpIdArray, tpColArray, 2);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 9:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 473 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 10:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 524 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 11:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 492 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 12:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 499 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 13:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 497 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 14:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 496 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 15:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 500 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 16:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 498 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 17:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    /*
+                                        Location loc = new Location { x = 918.2499f, y = 50.25024f, z = 80.89696f };
+                                        Teleport(loc);
+                                    */
+                                    tpIdArray = new int[] { 679 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 18:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    /*
+                                        loc = new Location { x = 777f, y = -1876f, z = 29.29654f };
+                                        Teleport(loc);
+                                    */
+                                    tpIdArray = new int[] { 777 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 19:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 779 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 20:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 826 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 21:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 136 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 22:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 643 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 23:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 766 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 24:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 90 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 25:
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 362 };
+                                    tpColArray = new int[] { };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 6:
+                    switch (menulevel)
+                    {
+                        case 0:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    setRPMultipler(1.0f);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    setRPMultipler(2.0f);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    setRPMultipler(3.0f);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    setRPMultipler(5.0f);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    setRPMultipler(10.0f);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    setRPMultipler(15.0f);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    setRPMultipler(20.0f);
+                                    break;
+                                case 7:
+                                    Activate();
+                                    setRPMultipler(25.0f);
+                                    break;
+                                case 8:
+                                    Activate();
+                                    setRPMultipler(30.0f);
+                                    break;
+                                case 9:
+                                    Activate();
+                                    setRPMultipler(35.0f);
+                                    break;
+                                case 10:
+                                    Activate();
+                                    setRPMultipler(40.0f);
+                                    break;
+                                case 11:
+                                    Activate();
+                                    setRPMultipler(50.0f);
+                                    break;
+                                case 12:
+                                    Activate();
+                                    setRPMultipler(100.0f);
+                                    break;
+                            }
+                            break;
+
+                        case 1:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    setREPMultipler(1.0f);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    setREPMultipler(2.0f);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    setREPMultipler(3.0f);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    setREPMultipler(5.0f);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    setREPMultipler(10.0f);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    setREPMultipler(15.0f);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    setREPMultipler(20.0f);
+                                    break;
+                                case 7:
+                                    Activate();
+                                    setREPMultipler(25.0f);
+                                    break;
+                                case 8:
+                                    Activate();
+                                    setREPMultipler(30.0f);
+                                    break;
+                                case 9:
+                                    Activate();
+                                    setREPMultipler(35.0f);
+                                    break;
+                                case 10:
+                                    Activate();
+                                    setREPMultipler(40.0f);
+                                    break;
+                                case 11:
+                                    Activate();
+                                    setREPMultipler(50.0f);
+                                    break;
+                                case 12:
+                                    Activate();
+                                    setREPMultipler(100.0f);
+                                    break;
+                                case 13:
+                                    Activate();
+                                    setREPMultipler(200.0f);
+                                    break;
+                                case 14:
+                                    Activate();
+                                    setREPMultipler(300.0f);
+                                    break;
+                                case 15:
+                                    Activate();
+                                    setREPMultipler(500.0f);
+                                    break;
+                                case 16:
+                                    Activate();
+                                    setREPMultipler(1000.0f);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 7:
+                    switch (menulevel)
+                    {
+                        case 0:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    casinoPrice = 1;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 1:
+                                    Activate();
+                                    casinoPrice = 2;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 2:
+                                    Activate();
+                                    casinoPrice = 3;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 3:
+                                    Activate();
+                                    casinoPrice = 4;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 4:
+                                    Activate();
+                                    casinoPrice = 5;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 5:
+                                    Activate();
+                                    casinoPrice = 6;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 6:
+                                    Activate();
+                                    casinoPrice = 7;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 7:
+                                    Activate();
+                                    casinoPrice = 8;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 8:
+                                    Activate();
+                                    casinoPrice = 9;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 9:
+                                    Activate();
+                                    casinoPrice = 10;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 10:
+                                    Activate();
+                                    casinoPrice = 11;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 11:
+                                    Activate();
+                                    casinoPrice = 12;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 12:
+                                    Activate();
+                                    casinoPrice = 13;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 13:
+                                    Activate();
+                                    casinoPrice = 14;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 14:
+                                    Activate();
+                                    casinoPrice = 15;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 15:
+                                    Activate();
+                                    casinoPrice = 16;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 16:
+                                    Activate();
+                                    casinoPrice = 17;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                                case 17:
+                                    Activate();
+                                    casinoPrice = 18;
+                                    bGetCasinoPrice = !bGetCasinoPrice;
+                                    break;
+                            }
+                            break;
+                        case 1:
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    _SG_Int(262145 + 24135, 1); // South American Imports (14400000)
+                                    break;
+                                case 1:
+                                    Activate();
+                                    _SG_Int(262145 + 24136, 1); // Pharmaceutical Research (7200000)
+                                    break;
+                                case 2:
+                                    Activate();
+                                    _SG_Int(262145 + 24137, 1); // Organic Produce (2400000)
+                                    break;
+                                case 3:
+                                    Activate();
+                                    _SG_Int(262145 + 24138, 1); // Printing and Copying (1800000)
+                                    break;
+                                case 4:
+                                    Activate();
+                                    _SG_Int(262145 + 24139, 1); // Cash Creation (3600000)
+                                    break;
+                                case 5:
+                                    Activate();
+                                    _SG_Int(262145 + 24134, 1); // Sporting Goods (4800000)
+                                    break;
+                                case 6:
+                                    Activate();
+                                    _SG_Int(262145 + 24140, 1); // Cargo and Shipments (8400000)
+                                    break;
+                            }
+                            break;
                         case 2:
                             switch (menuItem)
                             {
@@ -723,10 +2387,9 @@ namespace GTAVCSMM
                             break;
                     }
                     break;
-				}
-				break;
-			}
-		}
+            }
+
+        }
 
         public static void runSingleItem()
         {
@@ -852,8 +2515,36 @@ namespace GTAVCSMM
             });
         }
 
+        public static void getLuckyWheelPrice(int id)
+        {
+            string script = "casino_lucky_wheel";
+            int Index = 274 + 14;
+            long scriptAddr = GetLocalScript(script);
+            if (scriptAddr > 0 && id > 0)
+            {
+                long scriptAddr2 = scriptAddr + (8 * Index);
+                Console.WriteLine(scriptAddr2);
+                int scriptInt = Mem.ReadInt(scriptAddr2, null);
+                Console.WriteLine(scriptInt);
+                Mem.writeInt(scriptAddr2, null, id);
+            }
+        }
+        public static void setRPMultipler(float m)
+        {
+            _SG_Float(262145 + 1, m);
+        }
 
-        #Region Teleport part
+        public static void setREPMultipler(float m)
+        {
+            _SG_Float(262145 + 31278, m); // Street Race
+            _SG_Float(262145 + 31279, m); // Pursuit Race
+            _SG_Float(262145 + 31280, m); // Scramble
+            _SG_Float(262145 + 31281, m); // Head 2 Head
+            _SG_Float(262145 + 31283, m); // Car Meet
+            _SG_Float(262145 + 31284, m); // Test Track
+        }
+
+        #region Teleport part
         private static void Teleport(Location l)
         {
             if (Mem.ReadInt(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oInVehicle }) == 0)
