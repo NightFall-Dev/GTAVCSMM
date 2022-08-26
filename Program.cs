@@ -94,14 +94,6 @@ namespace GTAVCSMM
         #region PROCESS INFO
         private static bool bGodMode = false;
         private static bool bgodState = false;
-        private static bool bNeverWanted = false;
-        private static bool bNoRagdoll = false;
-        private static bool bUndeadOffRadar = false;
-        private static bool bSeatBelt = false;
-        private static bool bSuperJump = false;
-        private static bool bExplosiveAmmo = false;
-        private static bool bDisableCollision = false;
-        private static bool bVehicleGodMode = false;
         private static int frameFlagCount = 0;
 
         [DllImport("user32.dll")]
@@ -130,191 +122,6 @@ namespace GTAVCSMM
                     Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oGod }, 0);
                     settings.pgodm = false;
                     Deactivate();
-                }
-            }
-        }
-
-        public static void pNEVERWANTED()
-        {
-            if (bNeverWanted)
-            {
-                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 0);
-                if (!settings.pnwanted)
-                {
-                    Activate();
-                }
-                settings.pnwanted = true;
-            }
-            else
-            {
-                if (settings.pnwanted)
-                {
-                    settings.pnwanted = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pNORAGDOLL()
-        {
-            if (bNoRagdoll)
-            {
-                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oRagdoll }, 1);
-                if (!settings.pnragdoll)
-                {
-                    Activate();
-                }
-                settings.pnragdoll = true;
-            }
-            else
-            {
-                if (settings.pnragdoll)
-                {
-                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oRagdoll }, 32);
-                    settings.pnragdoll = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pUNDEADOFFRADAR()
-        {
-            if (bUndeadOffRadar)
-            {
-                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oHealthMax }, 0);
-                if (!settings.puoffradar)
-                {
-                    Activate();
-                }
-                settings.puoffradar = true;
-            }
-            else
-            {
-                if (settings.puoffradar)
-                {
-                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oHealthMax }, 328f);
-                    settings.puoffradar = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pSEATBELT()
-        {
-            if (bSeatBelt)
-            {
-                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oSeatbelt }, -55);
-                if (!settings.psbelt)
-                {
-                    Activate();
-                }
-                settings.psbelt = true;
-            }
-            else
-            {
-                if (settings.psbelt)
-                {
-                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.oSeatbelt }, -56);
-                    settings.psbelt = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pSUPERJUMP()
-        {
-            if (bSuperJump)
-            {
-                if (!settings.psjump)
-                {
-                    frameFlagCount = frameFlagCount + 64;
-                    Activate();
-                }
-                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-                settings.psjump = true;
-            }
-            else
-            {
-                if (settings.psjump)
-                {
-                    frameFlagCount = frameFlagCount - 64;
-                    Deactivate();
-                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-                    settings.psjump = false;
-                }
-            }
-        }
-
-        public static void pEXPLOSIVEAMMO()
-        {
-            if (bExplosiveAmmo)
-            {
-                if (!settings.psexammo)
-                {
-                    frameFlagCount = frameFlagCount + 8;
-                    Activate();
-                }
-                Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-                settings.psexammo = true;
-            }
-            else
-            {
-                if (settings.psexammo)
-                {
-                    frameFlagCount = frameFlagCount - 8;
-                    Deactivate();
-                    Mem.Write(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-                    settings.psexammo = false;
-                }
-            }
-        }
-        public static void pDISABLECOLLISION()
-        {
-            long paddr = Mem.ReadPointer(settings.WorldPTR, new int[] { offsets.pCPed, 0x30, 0x10, 0x20, 0x70, 0x0 });
-            long paddr2 = Mem.GetPtrAddr(paddr + 0x2C, null);
-
-            if (bDisableCollision)
-            {
-                Mem.writeFloat(paddr2, null, -1.0f);
-                if (!settings.pdiscol)
-                {
-                    Activate();
-                }
-                settings.pdiscol = true;
-            }
-            else
-            {
-                if (settings.pdiscol)
-                {
-                    Mem.writeFloat(paddr2, null, 0.25f);
-                    settings.pdiscol = false;
-                    Deactivate();
-                }
-            }
-        }
-        public static void vGODMODE()
-        {
-            long paddr = Mem.ReadPointer(settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCVehicle });
-            if (paddr > 0)
-            {
-                long paddr2 = Mem.GetPtrAddr(paddr + offsets.oGod, null);
-                if (bVehicleGodMode)
-                {
-                    Mem.writeInt(paddr2, null, 1);
-                    if (!settings.vgodm)
-                    {
-                        Activate();
-                    }
-                    settings.vgodm = true;
-                }
-                else
-                {
-                    if (settings.vgodm)
-                    {
-                        Mem.writeInt(paddr2, null, 0);
-                        settings.vgodm = false;
-                        Deactivate();
-                    }
                 }
             }
         }
@@ -382,13 +189,13 @@ namespace GTAVCSMM
                 }
                 else
                 {
-                    MessageBox.Show("GTA is not Running!", "Serious Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Grand Theft Auto V is not Running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Quit();
                 }
             }
             catch
             {
-                MessageBox.Show("GTA is not Running!", "Serious Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Grand Theft Auto V is not Running.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Quit();
             }
         }
@@ -414,19 +221,11 @@ namespace GTAVCSMM
         private static void MemoryTimer_Tick(object sender, EventArgs e)
         {
             pGODMODE();
-            pNEVERWANTED();
-            pNORAGDOLL();
-            pUNDEADOFFRADAR();
-            pSEATBELT();
-            pDISABLECOLLISION();
-            vGODMODE();
         }
 
         private static void fastTimer_Tick(object sender, EventArgs e)
         {
-            pSUPERJUMP();
-            pEXPLOSIVEAMMO();
-            cPRICE();
+
         }
 
         #endregion
@@ -494,7 +293,7 @@ namespace GTAVCSMM
             // 
             listBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             listBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            listBx.Font = new System.Drawing.Font("Arial", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            listBx.Font = new System.Drawing.Font("Tahoma", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             listBx.FormattingEnabled = true;
             listBx.ItemHeight = 24;
             listBx.Location = new System.Drawing.Point(6, 50);
@@ -509,7 +308,7 @@ namespace GTAVCSMM
             // 
             label1.AutoSize = true;
             label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            label1.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label1.Font = new System.Drawing.Font("Tahoma", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             label1.Location = new System.Drawing.Point(1, 9);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(168, 33);
@@ -533,12 +332,12 @@ namespace GTAVCSMM
             // 
             // ProcessTimer
             // 
-            ProcessTimer.Interval = 100;
+            ProcessTimer.Interval = 500;
             ProcessTimer.Tick += new System.EventHandler(ProcessTimer_Tick);
             // 
             // MemoryTimer
             // 
-            MemoryTimer.Interval = 100;
+            MemoryTimer.Interval = 500;
             MemoryTimer.Tick += new System.EventHandler(MemoryTimer_Tick);
             // 
             // Form1
@@ -608,8 +407,8 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 0:
-                            listBx.Items.Add("Re-Init");
-                            listBx.Items.Add("Quit (Del)");
+                            listBx.Items.Add("Refresh");
+                            listBx.Items.Add("Exit");
 
                             menuMainLvl = 1;
                             menuLvl = 0;
@@ -645,17 +444,6 @@ namespace GTAVCSMM
 
                         case 2:
                             listBx.Items.Add("God Mode (F6)");
-                            listBx.Items.Add("Super Jump");
-                            listBx.Items.Add("Never Wanted (F7)");
-                            listBx.Items.Add("Seatbelt");
-                            listBx.Items.Add("No Ragdoll");
-                            listBx.Items.Add("Undead Off-Radar");
-                            listBx.Items.Add("Disable Collision");
-                            listBx.Items.Add("Skills \t\t\t ►");
-                            listBx.Items.Add("Swim Speed \t\t ►");
-                            listBx.Items.Add("Stealth Speed \t\t ►");
-                            listBx.Items.Add("Run Speed \t\t ►");
-                            listBx.Items.Add("Wanted Level \t\t ►");
 
                             menuMainLvl = 1;
                             menuLvl = 2;
@@ -677,8 +465,9 @@ namespace GTAVCSMM
                             break;
 
                         case 4:
-                            listBx.Items.Add("Explosive Ammo");
-                            listBx.Items.Add("Long Range");
+                            listBx.Items.Add("To Waypoint");
+                            listBx.Items.Add("To Objective");
+                            listBx.Items.Add("Locations \t\t ►");
 
                             menuMainLvl = 1;
                             menuLvl = 4;
@@ -689,9 +478,8 @@ namespace GTAVCSMM
                             break;
 
                         case 5:
-                            listBx.Items.Add("Waypoint (F8)");
-                            listBx.Items.Add("Objective");
-                            listBx.Items.Add("Locations \t\t ►");
+                            listBx.Items.Add("Quick Car Spawn \t\t ►");
+                            listBx.Items.Add("Manual Car Spawn \t\t ►");
 
                             menuMainLvl = 1;
                             menuLvl = 5;
@@ -700,33 +488,6 @@ namespace GTAVCSMM
                             LastMenuLvl = 1;
                             LastMenuItm = 5;
                             break;
-
-                        case 6:
-                            listBx.Items.Add("RP Multipler \t\t ►");
-                            listBx.Items.Add("REP Multipler \t\t ►");
-                            listBx.Items.Add("Nightclub Popularity");
-
-                            menuMainLvl = 1;
-                            menuLvl = 6;
-
-                            LastMenuMainLvl = 0;
-                            LastMenuLvl = 1;
-                            LastMenuItm = 6;
-                            break;
-
-                        case 7:
-                            listBx.Items.Add("Get Lucky Wheel Price \t ►");
-                            listBx.Items.Add("Trigger Nightclub Production \t ►");
-                            listBx.Items.Add("Quick Car Spawn \t\t ►");
-                            listBx.Items.Add("Manual Car Spawn \t\t ►");
-
-                            menuMainLvl = 1;
-                            menuLvl = 7;
-
-                            LastMenuMainLvl = 0;
-                            LastMenuLvl = 1;
-                            LastMenuItm = 7;
-                            break;
                     }
                     break;
 
@@ -734,86 +495,6 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 7:
-                            listBx.Items.Add("Stamina");
-                            listBx.Items.Add("Strength");
-                            listBx.Items.Add("Lung Capacity");
-                            listBx.Items.Add("Driving");
-                            listBx.Items.Add("Flying");
-                            listBx.Items.Add("Shooting");
-                            listBx.Items.Add("Stealth");
-
-                            menuMainLvl = 2;
-                            menuLvl = 7;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 7;
-                            break;
-
-                        case 8:
-                            listBx.Items.Add("Swim Speed = 0.0");
-                            listBx.Items.Add("Swim Speed = 0.5");
-                            listBx.Items.Add("Swim Speed = 1.0 (Default)");
-                            listBx.Items.Add("Swim Speed = 1.5");
-                            listBx.Items.Add("Swim Speed = 2.0");
-                            listBx.Items.Add("Swim Speed = 2.5");
-                            listBx.Items.Add("Swim Speed = 3.0");
-                            listBx.Items.Add("Swim Speed = 3.5");
-                            listBx.Items.Add("Swim Speed = 4.0");
-                            listBx.Items.Add("Swim Speed = 4.5");
-                            listBx.Items.Add("Swim Speed = 5.0");
-
-                            menuMainLvl = 2;
-                            menuLvl = 8;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 8;
-                            break;
-
-                        case 9:
-                            listBx.Items.Add("Stealth Speed = 0.0");
-                            listBx.Items.Add("Stealth Speed = 0.5");
-                            listBx.Items.Add("Stealth Speed = 1.0 (Default)");
-                            listBx.Items.Add("Stealth Speed = 1.5");
-                            listBx.Items.Add("Stealth Speed = 2.0");
-                            listBx.Items.Add("Stealth Speed = 2.5");
-                            listBx.Items.Add("Stealth Speed = 3.0");
-                            listBx.Items.Add("Stealth Speed = 3.5");
-                            listBx.Items.Add("Stealth Speed = 4.0");
-                            listBx.Items.Add("Stealth Speed = 4.5");
-                            listBx.Items.Add("Stealth Speed = 5.0");
-
-                            menuMainLvl = 2;
-                            menuLvl = 9;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 9;
-                            break;
-
-                        case 10:
-                            listBx.Items.Add("Run Speed = 0.0");
-                            listBx.Items.Add("Run Speed = 0.5");
-                            listBx.Items.Add("Run Speed = 1.0 (Default)");
-                            listBx.Items.Add("Run Speed = 1.5");
-                            listBx.Items.Add("Run Speed = 2.0");
-                            listBx.Items.Add("Run Speed = 2.5");
-                            listBx.Items.Add("Run Speed = 3.0");
-                            listBx.Items.Add("Run Speed = 3.5");
-                            listBx.Items.Add("Run Speed = 4.0");
-                            listBx.Items.Add("Run Speed = 4.5");
-                            listBx.Items.Add("Run Speed = 5.0");
-
-                            menuMainLvl = 2;
-                            menuLvl = 10;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 10;
-                            break;
-
-                        case 11:
                             listBx.Items.Add("Wanted Level = 0");
                             listBx.Items.Add("Wanted Level = 1");
                             listBx.Items.Add("Wanted Level = 2");
@@ -876,106 +557,6 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 0:
-                            listBx.Items.Add("RP x 1.0");
-                            listBx.Items.Add("RP x 2.0");
-                            listBx.Items.Add("RP x 3.0");
-                            listBx.Items.Add("RP x 5.0");
-                            listBx.Items.Add("RP x 10.0");
-                            listBx.Items.Add("RP x 15.0");
-                            listBx.Items.Add("RP x 20.0");
-                            listBx.Items.Add("RP x 25.0");
-                            listBx.Items.Add("RP x 30.0");
-                            listBx.Items.Add("RP x 35.0");
-                            listBx.Items.Add("RP x 40.0");
-                            listBx.Items.Add("RP x 50.0");
-                            listBx.Items.Add("RP x 100.0");
-
-                            menuMainLvl = 6;
-                            menuLvl = 0;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 6;
-                            LastMenuItm = 0;
-                            break;
-
-                        case 1:
-                            listBx.Items.Add("REP x 1.0");
-                            listBx.Items.Add("REP x 2.0");
-                            listBx.Items.Add("REP x 3.0");
-                            listBx.Items.Add("REP x 5.0");
-                            listBx.Items.Add("REP x 10.0");
-                            listBx.Items.Add("REP x 15.0");
-                            listBx.Items.Add("REP x 20.0");
-                            listBx.Items.Add("REP x 25.0");
-                            listBx.Items.Add("REP x 30.0");
-                            listBx.Items.Add("REP x 35.0");
-                            listBx.Items.Add("REP x 40.0");
-                            listBx.Items.Add("REP x 50.0");
-                            listBx.Items.Add("REP x 100.0");
-                            listBx.Items.Add("REP x 200.0");
-                            listBx.Items.Add("REP x 300.0");
-                            listBx.Items.Add("REP x 500.0");
-                            listBx.Items.Add("REP x 1000.0");
-
-                            menuMainLvl = 6;
-                            menuLvl = 1;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 6;
-                            LastMenuItm = 1;
-                            break;
-                    }
-                    break;
-
-                case 7:
-                    switch (menulevel)
-                    {
-                        case 0:
-                            listBx.Items.Add("Clothes (0)");
-                            listBx.Items.Add("RP (1)");
-                            listBx.Items.Add("Cash (1)");
-                            listBx.Items.Add("Chips (1)");
-                            listBx.Items.Add("Discount");
-                            listBx.Items.Add("RP (2)");
-                            listBx.Items.Add("Cash (2)");
-                            listBx.Items.Add("Chips (2)");
-                            listBx.Items.Add("Clothes (2)");
-                            listBx.Items.Add("RP (3)");
-                            listBx.Items.Add("Chips (3)");
-                            listBx.Items.Add("Mystery Price");
-                            listBx.Items.Add("Clothes (3)");
-                            listBx.Items.Add("RP (4)");
-                            listBx.Items.Add("Chips (4)");
-                            listBx.Items.Add("Clothes (4)");
-                            listBx.Items.Add("RP (5)");
-                            listBx.Items.Add("Podium Vehicle");
-
-                            menuMainLvl = 7;
-                            menuLvl = 0;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 7;
-                            LastMenuItm = 0;
-                            break;
-
-                        case 1:
-                            listBx.Items.Add("South American Imports");
-                            listBx.Items.Add("Pharmaceutical Research");
-                            listBx.Items.Add("Organic Produce");
-                            listBx.Items.Add("Printing and Copying");
-                            listBx.Items.Add("Cash Creation");
-                            listBx.Items.Add("Sporting Goods");
-                            listBx.Items.Add("Cargo and Shipments");
-
-                            menuMainLvl = 7;
-                            menuLvl = 1;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 7;
-                            LastMenuItm = 1;
-                            break;
-
-                        case 2:
                             listBx.Items.Add("ZR380");
                             listBx.Items.Add("Deluxo");
                             listBx.Items.Add("Opressor2");
@@ -1142,9 +723,10 @@ namespace GTAVCSMM
                             break;
                     }
                     break;
-            }
-
-        }
+				}
+				break;
+			}
+		}
 
         public static void runSingleItem()
         {
