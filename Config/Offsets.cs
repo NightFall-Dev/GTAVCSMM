@@ -1,4 +1,4 @@
-﻿namespace GTAVCSMM.Config
+namespace GTAVCSMM.Config
 {
     class Offsets
     {
@@ -144,7 +144,7 @@
         private int _pCPedWeaponManager = 0x10D8;
         private int _oSeatbelt = 0x145C; // byte 55:false 56:true
         //private int _oInVehicle = 0x1618; // int 16:false 0:true (perhaps 0xE52)
-	private int _oInVehicle = 0x14C7; // int 16:false 0:true
+		private int _oInVehicle = 0x14C7; // int 16:false 0:true
         private int _pedArmor = 0x1530; // float, 50: Online 100:Story Mode
 
         public int oEntityType
@@ -462,9 +462,8 @@
         private int _oMaxAmmo = 0x28;
         private int _pCAmmo = 0x0;
         private int _oCurrentAmmo = 0x18;
-	//
-	//private int _pCWeaponInventory = 0x10D0;
-	//private int _oAmmoModifier = 0x78;
+        private int _pCWeaponInventory = 0x10D0;
+        private int _oAmmoModifier = 0x78;
         public int pCWeaponInfo
         {
             get
@@ -633,12 +632,11 @@
                 return _oCurrentAmmo;
             }
         }
-	//
-        /*public int pCWeaponInventory
+        public int pCWeaponInventory
         {
             get
             {
-                return pCWeaponInventory;
+                return _pCWeaponInventory;
             }
         }
         public int oAmmoModifier
@@ -647,7 +645,7 @@
             {
                 return _oAmmoModifier;
             }
-        }*/
+        }
         #endregion
 
         #region CVehicle Offsets       
@@ -857,7 +855,7 @@
                 return _oCountermeasures;
             }
         }
-	//
+		//
         public int oTampaMissles
         {
             get
@@ -1290,11 +1288,21 @@
 
         #region CReplayInterface Offsets
         // CReplayInterface Offsets and more below
+        private int _pCVehicleInterface = 0x10;
         private int _pCPedInterface = 0x18;
         private int _pVehList = 0x180;
         private int _oVehNum = 0x190;
         private int _pPedList = 0x100;
         private int _oPedNum = 0x110;
+
+        public int pCVehicleInterface
+        {
+            get
+            {
+                return _pCVehicleInterface;
+            }
+        }
+
         public int pCPedInterface
         {
             get
