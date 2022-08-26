@@ -2840,14 +2840,14 @@ namespace GTAVCSMM
             _SG_Int(offsets.oVMCreate + 27 + 15, weapon1); // primary weapon
             _SG_Int(offsets.oVMCreate + 27 + 20, weapon2); // primary weapon
             // _SG_Int(offsets.oVMCreate + 27 + 1, "FCK4FD"); // License plate
-            _SG_Int(offsets.oVMCreate + 27 + 19, -1)
-            _SG_Int(offsets.oVMCreate + 27 + 21, 3)  //-- Engine (0-3)
-            _SG_Int(offsets.oVMCreate + 27 + 22, 3)
-            _SG_Int(offsets.oVMCreate + 27 + 23, 9)
-            _SG_Int(offsets.oVMCreate + 27 + 25, 8) //-- suspension (0-13)
-            _SG_Int(offsets.oVMCreate + 27 + 24, 58)
-            _SG_Int(offsets.oVMCreate + 27 + 69, -1) //-- Wheel type
-            _SG_Int(offsets.oVMCreate + 27 + 33, -1) //-- Wheel Selection
+            _SG_Int(offsets.oVMCreate + 27 + 19, -1);
+            _SG_Int(offsets.oVMCreate + 27 + 21, 3);  //-- Engine (0-3)
+            _SG_Int(offsets.oVMCreate + 27 + 22, 3);
+            _SG_Int(offsets.oVMCreate + 27 + 23, 9);
+            _SG_Int(offsets.oVMCreate + 27 + 25, 8); //-- suspension (0-13)
+            _SG_Int(offsets.oVMCreate + 27 + 24, 58);
+            _SG_Int(offsets.oVMCreate + 27 + 69, -1); //-- Wheel type
+            _SG_Int(offsets.oVMCreate + 27 + 33, -1); //-- Wheel Selection
         }
         public static string ShowDialog(string text, string caption)
         {
