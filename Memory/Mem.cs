@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,11 +7,11 @@ namespace GTAVCSMM.Memory
 {
     class Mem
     {
+        [DllImport("kernel32.dll")]
+        public static extern int WriteProcessMemory(IntPtr Handle, long BaseAddress, byte[] buffer, int Size, int BytesWritten = 0);
 
         [DllImport("kernel32.dll")]
-        public static extern int WriteProcessMemory(IntPtr Handle, long Address, byte[] buffer, int Size, int BytesWritten = 0);
-        [DllImport("kernel32.dll")]
-        public static extern int ReadProcessMemory(IntPtr Handle, long Address, byte[] buffer, int Size, int BytesRead = 0);
+        public static extern int ReadProcessMemory(IntPtr Handle, long BaseAddress, byte[] buffer, int Size, int BytesRead = 0);
 
         public Process Proc;
         public long BaseAddress;
@@ -124,5 +124,76 @@ namespace GTAVCSMM.Memory
         public byte ReadByte(long BasePTR, int[] offset) => ReadBytes(BasePTR, offset, 1)[0];
         public string ReadStr(long BasePTR, int[] offset, int size) => new ASCIIEncoding().GetString(ReadBytes_new(BasePTR, offset, size));
 
+        public T Read<T>(long basePtr, int[] offsets) where T : struct
+        {
+            byte[] buffer = new byte[Marshal.SizeOf(typeof(T))];
+            ReadProcessMemory(GetProcHandle(), GetPtrAddr(basePtr, offsets), buffer, buffer.Length);
+            return ByteArrayToStructure<T>(buffer);
+        }
+
+        public T Read<T>(long address) where T : struct
+        {
+            byte[] buffer = new byte[Marshal.SizeOf(typeof(T))];
+            ReadProcessMemory(GetProcHandle(), address, buffer, buffer.Length);
+            return ByteArrayToStructure<T>(buffer);
+        }
+
+        public void Write<T>(long basePtr, int[] offsets, T value) where T : struct
+        {
+            byte[] buffer = StructureToByteArray(value);
+            WriteProcessMemory(GetProcHandle(), GetPtrAddr(basePtr, offsets), buffer, buffer.Length);
+        }
+
+        public void Write<T>(long address, T value) where T : struct
+        {
+            byte[] buffer = StructureToByteArray(value);
+            WriteProcessMemory(GetProcHandle(), address, buffer, buffer.Length);
+        }
+
+        public bool IsValid(long Address)
+        {
+            return Address >= 0x10000 && Address < 0x000F000000000000;
+        }
+
+        #region Conversion
+        private static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
+        {
+            var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            try
+            {
+                return (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        private static byte[] StructureToByteArray(object obj)
+        {
+            int length = Marshal.SizeOf(obj);
+            byte[] array = new byte[length];
+            IntPtr pointer = Marshal.AllocHGlobal(length);
+            Marshal.StructureToPtr(obj, pointer, true);
+            Marshal.Copy(pointer, array, 0, length);
+            Marshal.FreeHGlobal(pointer);
+            return array;
+        }
+
+        private static float[] ConvertToFloatArray(byte[] bytes)
+        {
+            if (bytes.Length % 4 != 0)
+            {
+                throw new ArgumentException();
+            }
+
+            float[] floats = new float[bytes.Length / 4];
+            for (int i = 0; i < floats.Length; i++)
+            {
+                floats[i] = BitConverter.ToSingle(bytes, i * 4);
+            }
+            return floats;
+        }
+        #endregion
     }
 }
