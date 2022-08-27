@@ -3155,7 +3155,7 @@ namespace GTAVCSMM
             }
             if (tempLocation.z == 20)
             {
-                tempLocation.z = -255F;
+                tempLocation.z = -255f;
             } else
             {
                 tempLocation.z = tempLocation.z + zOffset;
