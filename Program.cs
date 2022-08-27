@@ -89,7 +89,7 @@ namespace GTAVCSMM
         private static bool bNoRagdoll = false;
         private static bool bUndeadOffRadar = false;
         private static bool bSeatBelt = false;
-        private static bool bSuperJump = false;
+        //private static bool bSuperJump = false;
         private static bool bExplosiveAmmo = false;
         private static bool bDisableCollision = false;
         private static bool bVehicleGodMode = false;
@@ -302,7 +302,7 @@ namespace GTAVCSMM
                 pUNDEADOFFRADAR();
                 pSEATBELT();
                 pDISABLECOLLISION();
-                pSUPERJUMP();
+                //pSUPERJUMP();
                 pEXPLOSIVEAMMO();
                 Thread.Sleep(1000);
             }
@@ -323,7 +323,7 @@ namespace GTAVCSMM
             // 
             listBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             listBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            listBx.Font = new System.Drawing.Font("Calibri", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            listBx.Font = new System.Drawing.Font("Calibri", 12.00f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             listBx.FormattingEnabled = true;
             listBx.ItemHeight = 24;
             listBx.Location = new System.Drawing.Point(6, 50);
@@ -348,16 +348,16 @@ namespace GTAVCSMM
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new System.Drawing.Font("Tahoma", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label2.Font = new System.Drawing.Font("Microsoft San Serif", 12.00f, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             label2.Location = new System.Drawing.Point(162, 16);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(65, 24);
             label2.TabIndex = 2;
-            label2.Text = "o1.61";
+            label2.Text = "1.61";
             // 
             // Form1
             // 
-            mainForm.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            mainForm.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             mainForm.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             mainForm.AutoSize = true;
             mainForm.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -369,7 +369,7 @@ namespace GTAVCSMM
             mainForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             mainForm.KeyPreview = true;
             mainForm.Name = "Form1";
-            mainForm.Opacity = 0.8D;
+            mainForm.Opacity = 0.4D;
             mainForm.ShowIcon = false;
             mainForm.ShowInTaskbar = false;
             mainForm.Text = "GTAVCSMM";
@@ -462,7 +462,7 @@ namespace GTAVCSMM
 
                         case 2:// Player
                             listBx.Items.Add("God Mode (F6)");
-                            listBx.Items.Add("Super Jump");
+                            //listBx.Items.Add("Super Jump");
                             listBx.Items.Add("Never Wanted (F7)");
                             listBx.Items.Add("Seatbelt");
                             listBx.Items.Add("No Ragdoll");
@@ -991,38 +991,38 @@ namespace GTAVCSMM
                                 case 0:// God mode
                                     bGodMode = !bGodMode;
                                     break;
-                                case 1:// Super Jump
+                                /*case 1:// Super Jump
                                     bSuperJump = !bSuperJump;
-                                    break;
-                                case 2:// Never wanted
+                                    break;*/
+                                case 1:// Never wanted
                                     bNeverWanted = !bNeverWanted;
                                     break;
-                                case 3:// Seatbelt
+                                case 2:// Seatbelt
                                     bSeatBelt = !bSeatBelt;
                                     break;
-                                case 4:// No Ragdoll
+                                case 3:// No Ragdoll
                                     bNoRagdoll = !bNoRagdoll;
                                     break;
-                                case 5:// Undead Off-radar
+                                case 4:// Undead Off-radar
                                     bUndeadOffRadar = !bUndeadOffRadar;
                                     break;
-                                case 6:// Disable Collission
+                                case 5:// Disable Collission
                                     bDisableCollision = !bDisableCollision;
                                     break;
-                                case 7:// case 2:// Player case 7:// Skills
-                                    listboxFill(2, 7);
+                                case 6:// case 2:// Player case 7:// Skills
+                                    listboxFill(2, 6);
+                                    break;
+                                case 7:
+                                    listboxFill(2, 7);// Swim Speed
                                     break;
                                 case 8:
-                                    listboxFill(2, 8);// Swim Speed
+                                    listboxFill(2, 8);// Stealth Speed
                                     break;
                                 case 9:
-                                    listboxFill(2, 9);// Stealth Speed
+                                    listboxFill(2, 9);// Run Speed
                                     break;
                                 case 10:
-                                    listboxFill(2, 10);// Run Speed
-                                    break;
-                                case 11:
-                                    listboxFill(2, 11);// Wanted Level
+                                    listboxFill(2, 10);// Wanted Level
                                     break;
                             }
                             break;
@@ -2560,7 +2560,7 @@ namespace GTAVCSMM
             }
         }
 
-        public static void pSUPERJUMP()
+        /*public static void pSUPERJUMP()
         {
             if (bSuperJump)
             {
@@ -2582,7 +2582,7 @@ namespace GTAVCSMM
                     Settings.psjump = false;
                 }
             }
-        }
+        }*/
 
         public static void pEXPLOSIVEAMMO()
         {
