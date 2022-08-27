@@ -143,7 +143,6 @@ namespace GTAVCSMM.Config
         private int _pCPlayerInfo = 0x10C8;
         private int _pCPedWeaponManager = 0x10D8;
         private int _oSeatbelt = 0x145C; // byte 55:false 56:true
-        //private int _oInVehicle = 0x1618; // int 16:false 0:true (perhaps 0xE52)
 		private int _oInVehicle = 0x14C7; // int 16:false 0:true
         private int _pedArmor = 0x1530; // float, 50: Online 100:Story Mode
 
@@ -675,7 +674,7 @@ namespace GTAVCSMM.Config
         private int _oMk2Missiles = 0x12A4; // int
         private int _oAircraftBomb = 0x12B4;
         private int _oCountermeasures = 0x12B8;
-	//
+		//
         private int _oTampaMissles = 0x129C;
         private int _oTampa3CarMKMortar = 0x12A0;
         private int _oKhankali1 = 0x12A8;
@@ -1394,10 +1393,10 @@ namespace GTAVCSMM.Config
 
         #region Vehicle Menus Globals
         // Vehicle Menus Globals
-        private int _oVMCreate = 2725439;//2725260; // Create any vehicle.
-        private int _oVMYCar = 2815059;//2810287;  // Get my car.
-        private int _oVGETIn = 2671449;//2671444;  // Spawn into vehicle.
-        private int _oVMSlots = 1585857;//1585844;  // Get vehicle slots.
+        private int _oVMCreate = 2725439;// Create any vehicle.
+        private int _oVMYCar = 2815059;// Get my car.
+        private int _oVGETIn = 2671449;// Spawn into vehicle.
+        private int _oVMSlots = 1585857;// Get vehicle slots.
         public int oVMCreate
         {
             get
@@ -1430,9 +1429,9 @@ namespace GTAVCSMM.Config
 
         #region Some Player / Network times associated Globals
         // Some Player / Network times associated Globals
-        private int _oPlayerGA = 2703735;//2441237;
-        private int _oPlayerIDHelp = 2689235;//2426865;
-        private int _oNETTimeHelp = 2703735;//2441237;
+        private int _oPlayerGA = 2703735;
+        private int _oPlayerIDHelp = 2689235;
+        private int _oNETTimeHelp = 2703735;
         public int oPlayerGA
         {
             get
