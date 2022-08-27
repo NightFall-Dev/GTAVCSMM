@@ -856,7 +856,7 @@ namespace GTAVCSMM
                         break;
                     }
                     break;
-
+		}
                 case 3:// Teleport
                     switch (menulevel)
                     {
@@ -1407,7 +1407,7 @@ namespace GTAVCSMM
                             break;
                     }
                     break;
-
+		}
                 case 4:// Casino Prize Wheel
                     switch (menulevel)
                     {
