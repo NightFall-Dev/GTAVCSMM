@@ -401,6 +401,95 @@ namespace GTAVCSMM
                     LastMenuLvl = 0;
                     LastMenuItm = 0;
                     break;
+					//
+                case 1:
+                    switch (menulevel)
+                    {
+                        case 0:
+                            listBx.Items.Add("Re-Init");
+                            listBx.Items.Add("Quit (Del)");
+
+                            menuMainLvl = 1;
+                            menuLvl = 0;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 0;
+                            break;
+
+                        case 1:
+                            listBx.Items.Add("Join Public Session");
+                            listBx.Items.Add("New Public Session");
+                            listBx.Items.Add("Solo Session");
+                            listBx.Items.Add("Leave Online");
+                            listBx.Items.Add("Empty Session (10 Sec. Freeze)");
+                            listBx.Items.Add("Invite Only Session");
+                            listBx.Items.Add("Find Friend Session");
+                            listBx.Items.Add("Closed Friend Session");
+                            listBx.Items.Add("Crew Session");
+                            listBx.Items.Add("Join Crew Session");
+                            listBx.Items.Add("Closed Crew Session");
+                            /*
+                            listBx.Items.Add("Disconnect");
+                            */
+
+                            menuMainLvl = 1;
+                            menuLvl = 1;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 1;
+                            break;
+
+                        case 2:
+                            listBx.Items.Add("God Mode (F6)");
+
+                            menuMainLvl = 1;
+                            menuLvl = 2;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 2;
+                            break;
+
+                        case 3:
+                            listBx.Items.Add("God Mode");
+
+                            menuMainLvl = 1;
+                            menuLvl = 3;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 3;
+                            break;
+
+                        case 4:
+                            listBx.Items.Add("Waypoint (F8)");
+                            listBx.Items.Add("Objective");
+                            listBx.Items.Add("Locations \t\t ►");
+
+                            menuMainLvl = 1;
+                            menuLvl = 4;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 4;
+                            break;
+
+                        case 5:
+                            listBx.Items.Add("Quick Car Spawn \t\t ►");
+                            listBx.Items.Add("Manual Car Spawn \t\t ►");
+
+                            menuMainLvl = 1;
+                            menuLvl = 5;
+
+                            LastMenuMainLvl = 0;
+                            LastMenuLvl = 1;
+                            LastMenuItm = 5;
+                            break;
+                    }
+                    break;
+					//
 			}
             listBx.SelectedIndex = 0;
             mainForm.TopMost = true;
@@ -434,15 +523,238 @@ namespace GTAVCSMM
                                     listboxFill(1, 3);// Vehicle
                                     break;
                                 case 4:
-                                    listboxFill(1, 4);// Online Services
+                                    listboxFill(1, 4);// Teleport
                                     break;
                                 case 5:
-                                    listboxFill(1, 5);// World
+                                    listboxFill(1, 5);// Online Services
+                                    break;
+                                case 6:
+                                    listboxFill(1, 6);// World
                                     break;
                             }
                             break;
                     }
                     break;
+					//
+                case 1:
+                    switch (menulevel)
+                    {
+                        case 0:// These are what inside the Main
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    // Re-Init
+                                    Console.WriteLine("Nothing to do");
+                                    break;
+                                case 1:
+                                    Quit();
+                                    break;
+                            }
+                            break;
+                        case 1:// These are what inside the Session
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    LoadSession(0);
+                                    break;
+                                case 1:
+                                    Activate();
+                                    LoadSession(1);
+                                    break;
+                                case 2:
+                                    Activate();
+                                    LoadSession(10);
+                                    break;
+                                case 3:
+                                    Activate();
+                                    LoadSession(-1);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    empty_session();
+                                    break;
+                                case 5:
+                                    Activate();
+                                    LoadSession(11);
+                                    break;
+                                case 6:
+                                    Activate();
+                                    LoadSession(9);
+                                    break;
+                                case 7:
+                                    Activate();
+                                    LoadSession(6);
+                                    break;
+                                case 8:
+                                    Activate();
+                                    LoadSession(3);
+                                    break;
+                                case 9:
+                                    Activate();
+                                    LoadSession(12);
+                                    break;
+                                case 10:
+                                    Activate();
+                                    LoadSession(2);
+                                    break;
+                                    /*
+                                case 11:
+                                    Activate();
+                                    LoadSession(-2);
+                                    break;
+                                    */
+                            }
+                            break;
+                        case 2:// These are what inside the Player
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    bGodMode = !bGodMode;
+                                    break;
+                            }
+                            break;
+                        case 3:// These are what inside the Vehicle
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    bVehicleGodMode = !bVehicleGodMode;
+                                    break;
+                            }
+                            break;
+                        case 4:// These are what inside the Teleport
+                            switch (menuItem)
+                            {
+                                case 0:// To Waypoint
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    Activate();
+                                    tpIdArray = new int[] { 8 };
+                                    tpColArray = new int[] { 84 };
+                                    teleportBlip(tpIdArray, tpColArray, 20);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 1:// To Objective
+                                    Activate();
+
+                                    if (bGodMode)
+                                    {
+                                        bgodState = true;
+                                    }
+                                    else
+                                    {
+                                        bGodMode = true;
+                                        bgodState = false;
+                                    }
+                                    tpIdArray = new int[] { 1 };
+                                    tpColArray = new int[] { 5, 60, 66 };
+                                    teleportBlip(tpIdArray, tpColArray);
+                                    if (!bgodState)
+                                    {
+                                        bGodMode = false;
+                                    }
+                                    break;
+                                case 2:// To Specified Location
+                                    ListboxFill(5, 2);
+                                    break;
+                            }
+                            break;
+                        case 5:// These are what inside the Online Services
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    ListboxFill(5, 0);
+                                    break;
+                                case 1:
+                                    ListboxFill(5, 1);
+                                    break;
+                            }
+                            break;
+                        case 6// These are what inside the Online Services? or World?
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    ListboxFill(6, 0);
+                                    break;
+                                case 1:
+                                    ListboxFill(6, 1);
+                                    break;
+                                case 2:
+                                    new Thread(() =>
+                                    {
+                                        Thread.CurrentThread.IsBackground = true;
+                                        string promptValue = ShowDialog("Enter the name like \"opressor2\" without the quotes.", "Enter car name!");
+                                        if (promptValue != "")
+                                        {
+                                            Activate();
+                                            carSpawn(promptValue, 0);
+                                        }
+                                    }).Start();
+                                    break;
+                            }
+                            break;
+                        case 7:// World
+                            switch (menuItem)
+                            {
+                                case 0:
+                                    Activate();
+                                    kill_npcs();
+                                    break;
+                                case 1:
+                                    Activate();
+                                    kill_enemies();
+                                    break;
+                                case 2:
+                                    Activate();
+                                    kill_cops();
+                                    break;
+                                case 3:
+                                    Activate();
+                                    blind_cops(true);
+                                    break;
+                                case 4:
+                                    Activate();
+                                    bribe_cops(true);
+                                    break;
+                                case 5:
+                                    Activate();
+                                    destroy_vehs_of_npcs();
+                                    break;
+                                case 6:
+                                    Activate();
+                                    destroy_vehs_of_enemies();
+                                    break;
+                                case 7:
+                                    Activate();
+                                    destroy_vehs_of_cops();
+                                    break;
+                                case 8:
+                                    Activate();
+                                    destroy_all_vehicles();
+                                    break;
+                                case 9:
+                                    Activate();
+                                    revive_all_vehicles();
+                                    break;
+                                case 10:
+                                    bCopKiller = !bCopKiller;
+                                    break;
+                            }
+                            break;
+
+                    }
+                    break;
+					//
 			}
 		}
         #endregion
