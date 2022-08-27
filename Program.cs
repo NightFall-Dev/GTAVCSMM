@@ -288,7 +288,7 @@ namespace GTAVCSMM
             while (true)
             {
                 cPRICE();
-                Thread.Sleep(0);
+                Thread.Sleep(500);
             }
         }
         public static void StdPrecisionTimer()
@@ -304,7 +304,7 @@ namespace GTAVCSMM
                 pDISABLECOLLISION();
                 pSUPERJUMP();
                 pEXPLOSIVEAMMO();
-                Thread.Sleep(10);
+                Thread.Sleep(1000);
             }
         }
         public static void LoPrecisionTimer()
@@ -312,7 +312,7 @@ namespace GTAVCSMM
             while (true)
             {
                 vCOPKILLER();
-                Thread.Sleep(750);
+                Thread.Sleep(2000);
             }
         }
 
@@ -323,7 +323,7 @@ namespace GTAVCSMM
             // 
             listBx.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             listBx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            listBx.Font = new System.Drawing.Font("Arial", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            listBx.Font = new System.Drawing.Font("Calibri", 13.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             listBx.FormattingEnabled = true;
             listBx.ItemHeight = 24;
             listBx.Location = new System.Drawing.Point(6, 50);
@@ -338,7 +338,7 @@ namespace GTAVCSMM
             // 
             label1.AutoSize = true;
             label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            label1.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             label1.Location = new System.Drawing.Point(1, 9);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(168, 33);
@@ -348,12 +348,12 @@ namespace GTAVCSMM
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new System.Drawing.Font("Arial", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label2.Font = new System.Drawing.Font("Tahoma", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             label2.Location = new System.Drawing.Point(162, 16);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(65, 24);
             label2.TabIndex = 2;
-            label2.Text = "o1.60";
+            label2.Text = "o1.61";
             // 
             // Form1
             // 
@@ -424,7 +424,7 @@ namespace GTAVCSMM
                 case 1:
                     switch (menulevel)
                     {
-                        case 0:
+                        case 0:// Main
                             listBx.Items.Add("Re-Init");
                             listBx.Items.Add("Quit (Del)");
 
@@ -436,7 +436,7 @@ namespace GTAVCSMM
                             LastMenuItm = 0;
                             break;
 
-                        case 1:
+                        case 1:// Session
                             listBx.Items.Add("Join Public Session");
                             listBx.Items.Add("New Public Session");
                             listBx.Items.Add("Solo Session");
@@ -460,7 +460,7 @@ namespace GTAVCSMM
                             LastMenuItm = 1;
                             break;
 
-                        case 2:
+                        case 2:// Player
                             listBx.Items.Add("God Mode (F6)");
                             listBx.Items.Add("Super Jump");
                             listBx.Items.Add("Never Wanted (F7)");
@@ -482,7 +482,7 @@ namespace GTAVCSMM
                             LastMenuItm = 2;
                             break;
 
-                        case 3:
+                        case 3:// Vehicle
                             listBx.Items.Add("God Mode");
 
                             menuMainLvl = 1;
@@ -493,7 +493,7 @@ namespace GTAVCSMM
                             LastMenuItm = 3;
                             break;
 
-                        case 4:
+                        case 4://Weapon
                             listBx.Items.Add("Explosive Ammo");
                             listBx.Items.Add("Long Range");
                             listBx.Items.Add("Fast Reload");
@@ -509,7 +509,7 @@ namespace GTAVCSMM
                             LastMenuItm = 4;
                             break;
 
-                        case 5:
+                        case 5:// Teleport
                             listBx.Items.Add("Waypoint (F8)");
                             listBx.Items.Add("Objective");
                             listBx.Items.Add("Locations \t\t ►");
@@ -522,7 +522,7 @@ namespace GTAVCSMM
                             LastMenuItm = 5;
                             break;
 
-                        case 6:
+                        case 6:// Tunables
                             listBx.Items.Add("RP Multipler \t\t ►");
                             listBx.Items.Add("REP Multipler \t\t ►");
                             listBx.Items.Add("Nightclub Popularity");
@@ -535,7 +535,7 @@ namespace GTAVCSMM
                             LastMenuItm = 6;
                             break;
 
-                        case 7:
+                        case 7:// Online Services
                             listBx.Items.Add("Get Lucky Wheel Price \t ►");
                             listBx.Items.Add("Faster Nightclub Production");
                             listBx.Items.Add("Quick Car Spawn \t\t ►");
@@ -549,7 +549,7 @@ namespace GTAVCSMM
                             LastMenuItm = 7;
                             break;
 
-                        case 8:
+                        case 8:// World
                             listBx.Items.Add("Kill NPCs");
                             listBx.Items.Add("Kill Enemies");
                             listBx.Items.Add("Kill Cops");
@@ -572,10 +572,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 2:
+                case 2:// Player
                     switch (menulevel)
                     {
-                        case 7:
+                        case 7:// Skills
                             listBx.Items.Add("Stamina");
                             listBx.Items.Add("Strength");
                             listBx.Items.Add("Lung Capacity");
@@ -592,7 +592,7 @@ namespace GTAVCSMM
                             LastMenuItm = 7;
                             break;
 
-                        case 8:
+                        case 8:// Swim Speed
                             listBx.Items.Add("Swim Speed = 0.0");
                             listBx.Items.Add("Swim Speed = 0.5");
                             listBx.Items.Add("Swim Speed = 1.0 (Default)");
@@ -613,7 +613,7 @@ namespace GTAVCSMM
                             LastMenuItm = 8;
                             break;
 
-                        case 9:
+                        case 9:// Stealth Speed
                             listBx.Items.Add("Stealth Speed = 0.0");
                             listBx.Items.Add("Stealth Speed = 0.5");
                             listBx.Items.Add("Stealth Speed = 1.0 (Default)");
@@ -634,7 +634,7 @@ namespace GTAVCSMM
                             LastMenuItm = 9;
                             break;
 
-                        case 10:
+                        case 10:// Run Speed
                             listBx.Items.Add("Run Speed = 0.0");
                             listBx.Items.Add("Run Speed = 0.5");
                             listBx.Items.Add("Run Speed = 1.0 (Default)");
@@ -655,7 +655,7 @@ namespace GTAVCSMM
                             LastMenuItm = 10;
                             break;
 
-                        case 11:
+                        case 11:// Wanted Level
                             listBx.Items.Add("Wanted Level = 0");
                             listBx.Items.Add("Wanted Level = 1");
                             listBx.Items.Add("Wanted Level = 2");
@@ -673,10 +673,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 4:
+                case 4:// Weapon
                     switch (menulevel)
                     {
-                        case 2:
+                        case 2:// Weapon Damage
                             listBx.Items.Add("Damage x 1.0");
                             listBx.Items.Add("Damage x 2.0");
                             listBx.Items.Add("Damage x 3.0");
@@ -700,10 +700,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 5:
+                case 5:// Teleport
                     switch (menulevel)
                     {
-                        case 2:
+                        case 2:// Location
                             listBx.Items.Add("Nightclub");              // 0
                             listBx.Items.Add("Arcade");                 // 1
                             listBx.Items.Add("Office");                 // 2
@@ -742,10 +742,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 6:
+                case 6:// Tunables
                     switch (menulevel)
                     {
-                        case 0:
+                        case 0:// RP Multiplier
                             listBx.Items.Add("RP x 1.0");
                             listBx.Items.Add("RP x 2.0");
                             listBx.Items.Add("RP x 3.0");
@@ -768,7 +768,7 @@ namespace GTAVCSMM
                             LastMenuItm = 0;
                             break;
 
-                        case 1:
+                        case 1:// REP Multiplier
                             listBx.Items.Add("REP x 1.0");
                             listBx.Items.Add("REP x 2.0");
                             listBx.Items.Add("REP x 3.0");
@@ -797,10 +797,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 7:
+                case 7:// Online Services
                     switch (menulevel)
                     {
-                        case 0:
+                        case 0:// Casino Prize Wheel
                             listBx.Items.Add("Clothes (0)");
                             listBx.Items.Add("RP (1)");
                             listBx.Items.Add("Cash (1)");
@@ -845,7 +845,7 @@ namespace GTAVCSMM
                             LastMenuItm = 1;
                             break;
 
-                        case 2:
+                        case 2:// Quick car spawn
                             listBx.Items.Add("ZR380");
                             listBx.Items.Add("Deluxo");
                             listBx.Items.Add("Opressor2");
@@ -885,31 +885,31 @@ namespace GTAVCSMM
                             switch (menuItem)
                             {
                                 case 0:
-                                    listboxFill(1, 0);
+                                    listboxFill(1, 0);// Main
                                     break;
                                 case 1:
-                                    listboxFill(1, 1);
+                                    listboxFill(1, 1);// Session
                                     break;
                                 case 2:
-                                    listboxFill(1, 2);
+                                    listboxFill(1, 2);// Player
                                     break;
                                 case 3:
-                                    listboxFill(1, 3);
+                                    listboxFill(1, 3);// Vehicle
                                     break;
                                 case 4:
-                                    listboxFill(1, 4);
+                                    listboxFill(1, 4);// Weapon
                                     break;
                                 case 5:
-                                    listboxFill(1, 5);
+                                    listboxFill(1, 5);// Teleport
                                     break;
                                 case 6:
-                                    listboxFill(1, 6);
+                                    listboxFill(1, 6);// Tunables
                                     break;
                                 case 7:
-                                    listboxFill(1, 7);
+                                    listboxFill(1, 7);// Online Services
                                     break;
                                 case 8:
-                                    listboxFill(1, 8);// Record A Studios
+                                    listboxFill(1, 8);// World
                                     break;
                             }
                             break;
@@ -919,62 +919,61 @@ namespace GTAVCSMM
                 case 1:
                     switch (menulevel)
                     {
-                        case 0:
+                        case 0:// Main Menu
                             switch (menuItem)
                             {
-                                case 0:
-                                    // Re-Init
+                                case 0:// Refresh Program
                                     Console.WriteLine("Nothing to do");
                                     break;
-                                case 1:
+                                case 1:// Exit
                                     Quit();
                                     break;
                             }
                             break;
-                        case 1:
+                        case 1:// Session
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// Public Session
                                     Activate();
                                     LoadSession(0);
                                     break;
-                                case 1:
+                                case 1:// New Public Session
                                     Activate();
                                     LoadSession(1);
                                     break;
-                                case 2:
+                                case 2:// Solo Session
                                     Activate();
                                     LoadSession(10);
                                     break;
-                                case 3:
+                                case 3:// Leave Session
                                     Activate();
                                     LoadSession(-1);
                                     break;
-                                case 4:
+                                case 4:// Empty Session
                                     Activate();
                                     empty_session();
                                     break;
-                                case 5:
+                                case 5:// Invite Only Session
                                     Activate();
                                     LoadSession(11);
                                     break;
-                                case 6:
+                                case 6:// Find Friend Session
                                     Activate();
                                     LoadSession(9);
                                     break;
-                                case 7:
+                                case 7:// Closed Friend Session
                                     Activate();
                                     LoadSession(6);
                                     break;
-                                case 8:
+                                case 8:// Crew Session
                                     Activate();
                                     LoadSession(3);
                                     break;
-                                case 9:
+                                case 9:// Join Crew Session
                                     Activate();
                                     LoadSession(12);
                                     break;
-                                case 10:
+                                case 10:// Closed Crew Session
                                     Activate();
                                     LoadSession(2);
                                     break;
@@ -986,86 +985,86 @@ namespace GTAVCSMM
                                     */
                             }
                             break;
-                        case 2:
+                        case 2:// Player Tab
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// God mode
                                     bGodMode = !bGodMode;
                                     break;
-                                case 1:
+                                case 1:// Super Jump
                                     bSuperJump = !bSuperJump;
                                     break;
-                                case 2:
+                                case 2:// Never wanted
                                     bNeverWanted = !bNeverWanted;
                                     break;
-                                case 3:
+                                case 3:// Seatbelt
                                     bSeatBelt = !bSeatBelt;
                                     break;
-                                case 4:
+                                case 4:// No Ragdoll
                                     bNoRagdoll = !bNoRagdoll;
                                     break;
-                                case 5:
+                                case 5:// Undead Off-radar
                                     bUndeadOffRadar = !bUndeadOffRadar;
                                     break;
-                                case 6:
+                                case 6:// Disable Collission
                                     bDisableCollision = !bDisableCollision;
                                     break;
-                                case 7:
+                                case 7:// case 2:// Player case 7:// Skills
                                     listboxFill(2, 7);
                                     break;
                                 case 8:
-                                    listboxFill(2, 8);
+                                    listboxFill(2, 8);// Swim Speed
                                     break;
                                 case 9:
-                                    listboxFill(2, 9);
+                                    listboxFill(2, 9);// Stealth Speed
                                     break;
                                 case 10:
-                                    listboxFill(2, 10);
+                                    listboxFill(2, 10);// Run Speed
                                     break;
                                 case 11:
-                                    listboxFill(2, 11);
+                                    listboxFill(2, 11);// Wanted Level
                                     break;
                             }
                             break;
-                        case 3:
+                        case 3:// Vehicle
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// Vehicle God
                                     bVehicleGodMode = !bVehicleGodMode;
                                     break;
                             }
                             break;
-                        case 4:
+                        case 4:// Weapon
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// Explosive Ammo
                                     bExplosiveAmmo = !bExplosiveAmmo;
                                     break;
-                                case 1:
+                                case 1:// Range
                                     Activate();
                                     Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oRange }, 250F);
                                     Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oLockRange }, 250F);
                                     break;
-                                case 2:
+                                case 2:// Fast reload
                                     Activate();
                                     Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oReloadMult }, 10F);
                                     Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oReloadVehicleMult }, 10F);
                                     break;
-                                case 3:
+                                case 3:// Weapon Damage
                                     listboxFill(4, 2);
                                     break;
-                                case 4:
+                                case 4:// Weapon Unlimited Ammo
                                     setWeaponUnlimitedAmmo();
                                     break;
-                                case 5:
+                                case 5:// Fill All Ammo
                                     fill_all_ammo();
                                     break;
                             }
                             break;
-                        case 5:
+                        case 5:// Teleport
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// Waypoint
                                     if (bGodMode)
                                     {
                                         bgodState = true;
@@ -1084,7 +1083,7 @@ namespace GTAVCSMM
                                         bGodMode = false;
                                     }
                                     break;
-                                case 1:
+                                case 1:// Objective
                                     Activate();
 
                                     if (bGodMode)
@@ -1104,41 +1103,41 @@ namespace GTAVCSMM
                                         bGodMode = false;
                                     }
                                     break;
-                                case 2:
+                                case 2:// Location
                                     listboxFill(5, 2);
                                     break;
                             }
                             break;
-                        case 6:
+                        case 6:// Tunables
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// RP Multiplier
                                     listboxFill(6, 0);
                                     break;
-                                case 1:
+                                case 1:// REP Multiplier
                                     listboxFill(6, 1);
                                     break;
-                                case 2:
+                                case 2:// Nightclub Popularity
                                     Activate();
                                     setStat("MP0_CLUB_POPULARITY", 1000);
                                     setStat("MP1_CLUB_POPULARITY", 1000);
                                     break;
                             }
                             break;
-                        case 7:
+                        case 7:// Online Services
                             switch (menuItem)
                             {
-                                case 0:
+                                case 0:// Get Lucky Wheel Prize
                                     listboxFill(7, 0);
                                     break;
-                                case 1:
+                                case 1:// Faster Nightclub Production
                                     set_nightclub_produce_time(1, true);
                                     Activate();
                                     break;
-                                case 2:
+                                case 2:// Quick car spawn
                                     listboxFill(7, 2);
                                     break;
-                                case 3:
+                                case 3:// Manual car spawn
                                     new Thread(() =>
                                     {
                                         Thread.CurrentThread.IsBackground = true;
@@ -1203,7 +1202,7 @@ namespace GTAVCSMM
 
                     }
                     break;
-                case 2:
+                case 2:// Skills
                     switch (menulevel)
                     {
                         case 7:
@@ -1247,7 +1246,7 @@ namespace GTAVCSMM
                             }
                             break;
 
-                        case 8:
+                        case 8:// Swim Speed
                             switch (menuItem)
                             {
                                 case 0:
@@ -1297,7 +1296,7 @@ namespace GTAVCSMM
                             }
                             break;
 
-                        case 9:
+                        case 9:// Walk Speed
                             switch (menuItem)
                             {
                                 case 0:
@@ -1347,7 +1346,7 @@ namespace GTAVCSMM
                             }
                             break;
 
-                        case 10:
+                        case 10:// Run Speed
                             switch (menuItem)
                             {
                                 case 0:
@@ -1397,7 +1396,7 @@ namespace GTAVCSMM
                             }
                             break;
 
-                        case 11:
+                        case 11:// Wanted Level
                             switch (menuItem)
                             {
                                 case 0:
@@ -1429,7 +1428,7 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 4:
+                case 4:// Damage Multiplier
                     switch (menulevel)
                     {
                         case 2:
@@ -1488,7 +1487,7 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 5:
+                case 5:// Teleport
                     switch (menulevel)
                     {
                         case 1:
@@ -2047,7 +2046,7 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 6:
+                case 6:// RP Multiplier
                     switch (menulevel)
                     {
                         case 0:
@@ -2108,7 +2107,7 @@ namespace GTAVCSMM
                             }
                             break;
 
-                        case 1:
+                        case 1:// REP Multiplier
                             switch (menuItem)
                             {
                                 case 0:
@@ -2184,7 +2183,7 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 7:
+                case 7:// Casino Prize Wheel
                     switch (menulevel)
                     {
                         case 0:
@@ -2282,7 +2281,7 @@ namespace GTAVCSMM
                                     break;
                             }
                             break;
-                        case 2:
+                        case 2:// Quick car spawn
                             switch (menuItem)
                             {
                                 case 0:
@@ -2386,7 +2385,7 @@ namespace GTAVCSMM
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                if ((Keys)vkCode == Keys.F5)
+                if ((Keys)vkCode == Keys.INSERT)
                 {
                     showHideOverlay();
                 }
@@ -2405,7 +2404,7 @@ namespace GTAVCSMM
                         }
                     }
                 }
-                else if ((Keys)vkCode == Keys.NumPad5)
+                else if ((Keys)vkCode == Keys.NumPad5)// To activate/toggle
                 {
                     runitem(menuMainLvl, menuLvl, listBx.SelectedIndex);
                 }
@@ -2774,7 +2773,7 @@ namespace GTAVCSMM
         {
             Task.Run(() =>
             {
-                SG<int>(1575012, id);
+                SG<int>(1575015, id);//1575012
                 SG<int>(1574589 + 2, id == -1 ? -1 : 0);
                 SG<int>(1574589, 1);
             });
