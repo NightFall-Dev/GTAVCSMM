@@ -1,0 +1,34 @@
+version: 1.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2019
+configuration: Release
+platform:
+- x86
+- x64
+clone_folder: C:\GTAVCSMM
+init:
+- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+build:
+  project: GTAVCSMM.sln
+  verbosity: normal
+test: off
+artifacts:
+- path: bin\x86\Release\GTAVCSMM.exe
+  name: GTAVCSMM_x86
+- path: bin\x64\Release\GTAVCSMM.exe
+  name: GTAVCSMM_x64
+deploy:
+- provider: GitHub
+  tag: 2.61
+  release: New car spawn function
+  description: Quick and manual car spawn added. [Outdated] Online 1.58
+  auth_token:
+    secure: hy9ZqFjLN/R2C07474iwmj0SdKJMh6wweutHVAiDYvc=
+  repository: NightFall-Dev/GTAVCSMM
+  artifact: GTAVCSMM.exe
+  force_update: true
+on_success:
+- sh: echo "BUILD SUCCESS"
+on_failure:
+- sh: echo "BUILD FAILED"
