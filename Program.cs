@@ -2385,7 +2385,7 @@ namespace GTAVCSMM
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                if ((Keys)vkCode == Keys.INSERT)
+                if ((Keys)vkCode == Keys.Insert)
                 {
                     showHideOverlay();
                 }
