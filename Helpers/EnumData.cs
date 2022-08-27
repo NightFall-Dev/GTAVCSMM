@@ -36,7 +36,7 @@
             ARMY
         };
 
-        public enum FrameFlags
+        /*public enum FrameFlags
         {
             ExplosiveAmmo = 1 << 11,
             FireAmmo = 1 << 12,
@@ -522,6 +522,6 @@
             YellowMission2 = 0x3C,
             Mission = 0x42,
             WaypointColor = 0x54
-        }
+        }*/
     }
 }
