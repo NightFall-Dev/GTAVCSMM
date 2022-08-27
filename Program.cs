@@ -680,7 +680,7 @@ namespace GTAVCSMM
                                     break;
                             }
                             break;
-                        case 6// These are what inside the Online Services? or World?
+                        case 6:// These are what inside the Online Services? or World?
                             switch (menuItem)
                             {
                                 case 0:
