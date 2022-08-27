@@ -85,17 +85,8 @@ namespace GTAVCSMM
 
         private static bool bGodMode = false;
         private static bool bgodState = false;
-        private static bool bNeverWanted = false;
-        private static bool bNoRagdoll = false;
-        private static bool bUndeadOffRadar = false;
-        private static bool bSeatBelt = false;
-        //private static bool bSuperJump = false;
-        private static bool bExplosiveAmmo = false;
-        private static bool bDisableCollision = false;
         private static bool bVehicleGodMode = false;
         private static int frameFlagCount = 0;
-        private static bool bGetCasinoPrice = false;
-        private static int casinoPrice = 0;
         private static bool bCopKiller = false;
 
         [DllImport("user32.dll")]
@@ -182,13 +173,13 @@ namespace GTAVCSMM
                 }
                 else
                 {
-                    MessageBox.Show("GTA is not Running!", "Serious Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("GTA is not Running!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Quit();
                 }
             }
             catch
             {
-                MessageBox.Show("GTA is not Running!", "Serious Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("GTA is not Running!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Quit();
             }
         }
@@ -261,8 +252,8 @@ namespace GTAVCSMM
 
                     getPointer();
 
-                    listboxStyle();
-                    listboxFill(0, 0);
+                    ListboxStyle();
+                    ListboxFill(0, 0);
                     listBx.Enabled = true;
 
                     Task.Run(() =>
@@ -287,7 +278,6 @@ namespace GTAVCSMM
         {
             while (true)
             {
-                cPRICE();
                 Thread.Sleep(500);
             }
         }
@@ -297,13 +287,6 @@ namespace GTAVCSMM
             {
                 pGODMODE();
                 vGODMODE();
-                pNEVERWANTED();
-                pNORAGDOLL();
-                pUNDEADOFFRADAR();
-                pSEATBELT();
-                pDISABLECOLLISION();
-                //pSUPERJUMP();
-                pEXPLOSIVEAMMO();
                 Thread.Sleep(1000);
             }
         }
@@ -353,7 +336,7 @@ namespace GTAVCSMM
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(65, 24);
             label2.TabIndex = 2;
-            label2.Text = "1.61";
+            label2.Text = "o1.61";
             // 
             // Form1
             // 
@@ -361,7 +344,7 @@ namespace GTAVCSMM
             mainForm.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             mainForm.AutoSize = true;
             mainForm.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            mainForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            mainForm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));// Menu Color
             mainForm.ClientSize = new System.Drawing.Size(207, 116);
             mainForm.Controls.Add(label2);
             mainForm.Controls.Add(label1);
@@ -369,7 +352,7 @@ namespace GTAVCSMM
             mainForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             mainForm.KeyPreview = true;
             mainForm.Name = "Form1";
-            mainForm.Opacity = 0.4D;
+            mainForm.Opacity = 0.6D;
             mainForm.ShowIcon = false;
             mainForm.ShowInTaskbar = false;
             mainForm.Text = "GTAVCSMM";
@@ -390,11 +373,11 @@ namespace GTAVCSMM
         #endregion
 
         #region List strings
-        public static void listboxStyle()
+        public static void ListboxStyle()
         {
         }
 
-        public static void listboxFill(int mainMenulevel, int menulevel)
+        public static void ListboxFill(int mainMenulevel, int menulevel)
         {
             listBx.Items.Clear();
             switch (mainMenulevel)
@@ -407,11 +390,9 @@ namespace GTAVCSMM
                     listBx.Items.Add("Session \t\t\t ►");    // 0,1
                     listBx.Items.Add("Player \t\t\t ►");     // 0,2
                     listBx.Items.Add("Vehicle \t\t\t ►");    // 0,3
-                    listBx.Items.Add("Weapon \t\t\t ►");     // 0,4
-                    listBx.Items.Add("Teleport \t\t\t ►");   // 0,5
-                    listBx.Items.Add("Tunables \t\t\t ►");   // 0,6
-                    listBx.Items.Add("Online Services \t\t ►");   // 0,7
-                    listBx.Items.Add("World \t\t\t ►");   // 0,8
+                    listBx.Items.Add("Teleport \t\t\t ►");   // 0,4
+                    listBx.Items.Add("Online Services \t\t ►");   // 0,5
+                    listBx.Items.Add("World \t\t\t ►");   // 0,6
 
                     menuMainLvl = 0;
                     menuLvl = 0;
@@ -425,8 +406,8 @@ namespace GTAVCSMM
                     switch (menulevel)
                     {
                         case 0:// Main
-                            listBx.Items.Add("Re-Init");
-                            listBx.Items.Add("Quit (Del)");
+                            listBx.Items.Add("Refresh");
+                            listBx.Items.Add("Exit");
 
                             menuMainLvl = 1;
                             menuLvl = 0;
@@ -462,16 +443,6 @@ namespace GTAVCSMM
 
                         case 2:// Player
                             listBx.Items.Add("God Mode (F6)");
-                            //listBx.Items.Add("Super Jump");
-                            listBx.Items.Add("Never Wanted (F7)");
-                            listBx.Items.Add("Seatbelt");
-                            listBx.Items.Add("No Ragdoll");
-                            listBx.Items.Add("Undead Off-Radar");
-                            listBx.Items.Add("Disable Collision");
-                            listBx.Items.Add("Skills \t\t\t ►");
-                            listBx.Items.Add("Swim Speed \t\t ►");
-                            listBx.Items.Add("Stealth Speed \t\t ►");
-                            listBx.Items.Add("Run Speed \t\t ►");
                             listBx.Items.Add("Wanted Level \t\t ►");
 
                             menuMainLvl = 1;
@@ -493,23 +464,7 @@ namespace GTAVCSMM
                             LastMenuItm = 3;
                             break;
 
-                        case 4://Weapon
-                            listBx.Items.Add("Explosive Ammo");
-                            listBx.Items.Add("Long Range");
-                            listBx.Items.Add("Fast Reload");
-                            listBx.Items.Add("Weapon Damage \t\t ►");
-                            listBx.Items.Add("Unlimited Ammo");
-                            listBx.Items.Add("Fill All Ammo");
-
-                            menuMainLvl = 1;
-                            menuLvl = 4;
-
-                            LastMenuMainLvl = 0;
-                            LastMenuLvl = 1;
-                            LastMenuItm = 4;
-                            break;
-
-                        case 5:// Teleport
+                        case 4:// Teleport
                             listBx.Items.Add("Waypoint (F8)");
                             listBx.Items.Add("Objective");
                             listBx.Items.Add("Locations \t\t ►");
@@ -522,22 +477,7 @@ namespace GTAVCSMM
                             LastMenuItm = 5;
                             break;
 
-                        case 6:// Tunables
-                            listBx.Items.Add("RP Multipler \t\t ►");
-                            listBx.Items.Add("REP Multipler \t\t ►");
-                            listBx.Items.Add("Nightclub Popularity");
-
-                            menuMainLvl = 1;
-                            menuLvl = 6;
-
-                            LastMenuMainLvl = 0;
-                            LastMenuLvl = 1;
-                            LastMenuItm = 6;
-                            break;
-
-                        case 7:// Online Services
-                            listBx.Items.Add("Get Lucky Wheel Price \t ►");
-                            listBx.Items.Add("Faster Nightclub Production");
+                        case 5:// Online Services
                             listBx.Items.Add("Quick Car Spawn \t\t ►");
                             listBx.Items.Add("Manual Car Spawn \t\t ►");
 
@@ -549,7 +489,7 @@ namespace GTAVCSMM
                             LastMenuItm = 7;
                             break;
 
-                        case 8:// World
+                        case 6:// World
                             listBx.Items.Add("Kill NPCs");
                             listBx.Items.Add("Kill Enemies");
                             listBx.Items.Add("Kill Cops");
@@ -572,135 +512,7 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 2:// Player
-                    switch (menulevel)
-                    {
-                        case 7:// Skills
-                            listBx.Items.Add("Stamina");
-                            listBx.Items.Add("Strength");
-                            listBx.Items.Add("Lung Capacity");
-                            listBx.Items.Add("Driving");
-                            listBx.Items.Add("Flying");
-                            listBx.Items.Add("Shooting");
-                            listBx.Items.Add("Stealth");
-
-                            menuMainLvl = 2;
-                            menuLvl = 7;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 7;
-                            break;
-
-                        case 8:// Swim Speed
-                            listBx.Items.Add("Swim Speed = 0.0");
-                            listBx.Items.Add("Swim Speed = 0.5");
-                            listBx.Items.Add("Swim Speed = 1.0 (Default)");
-                            listBx.Items.Add("Swim Speed = 1.5");
-                            listBx.Items.Add("Swim Speed = 2.0");
-                            listBx.Items.Add("Swim Speed = 2.5");
-                            listBx.Items.Add("Swim Speed = 3.0");
-                            listBx.Items.Add("Swim Speed = 3.5");
-                            listBx.Items.Add("Swim Speed = 4.0");
-                            listBx.Items.Add("Swim Speed = 4.5");
-                            listBx.Items.Add("Swim Speed = 5.0");
-
-                            menuMainLvl = 2;
-                            menuLvl = 8;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 8;
-                            break;
-
-                        case 9:// Stealth Speed
-                            listBx.Items.Add("Stealth Speed = 0.0");
-                            listBx.Items.Add("Stealth Speed = 0.5");
-                            listBx.Items.Add("Stealth Speed = 1.0 (Default)");
-                            listBx.Items.Add("Stealth Speed = 1.5");
-                            listBx.Items.Add("Stealth Speed = 2.0");
-                            listBx.Items.Add("Stealth Speed = 2.5");
-                            listBx.Items.Add("Stealth Speed = 3.0");
-                            listBx.Items.Add("Stealth Speed = 3.5");
-                            listBx.Items.Add("Stealth Speed = 4.0");
-                            listBx.Items.Add("Stealth Speed = 4.5");
-                            listBx.Items.Add("Stealth Speed = 5.0");
-
-                            menuMainLvl = 2;
-                            menuLvl = 9;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 9;
-                            break;
-
-                        case 10:// Run Speed
-                            listBx.Items.Add("Run Speed = 0.0");
-                            listBx.Items.Add("Run Speed = 0.5");
-                            listBx.Items.Add("Run Speed = 1.0 (Default)");
-                            listBx.Items.Add("Run Speed = 1.5");
-                            listBx.Items.Add("Run Speed = 2.0");
-                            listBx.Items.Add("Run Speed = 2.5");
-                            listBx.Items.Add("Run Speed = 3.0");
-                            listBx.Items.Add("Run Speed = 3.5");
-                            listBx.Items.Add("Run Speed = 4.0");
-                            listBx.Items.Add("Run Speed = 4.5");
-                            listBx.Items.Add("Run Speed = 5.0");
-
-                            menuMainLvl = 2;
-                            menuLvl = 10;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 10;
-                            break;
-
-                        case 11:// Wanted Level
-                            listBx.Items.Add("Wanted Level = 0");
-                            listBx.Items.Add("Wanted Level = 1");
-                            listBx.Items.Add("Wanted Level = 2");
-                            listBx.Items.Add("Wanted Level = 3");
-                            listBx.Items.Add("Wanted Level = 4");
-                            listBx.Items.Add("Wanted Level = 5");
-
-                            menuMainLvl = 2;
-                            menuLvl = 11;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 2;
-                            LastMenuItm = 11;
-                            break;
-                    }
-                    break;
-
-                case 4:// Weapon
-                    switch (menulevel)
-                    {
-                        case 2:// Weapon Damage
-                            listBx.Items.Add("Damage x 1.0");
-                            listBx.Items.Add("Damage x 2.0");
-                            listBx.Items.Add("Damage x 3.0");
-                            listBx.Items.Add("Damage x 5.0");
-                            listBx.Items.Add("Damage x 10.0");
-                            listBx.Items.Add("Damage x 20.0");
-                            listBx.Items.Add("Damage x 30.0");
-                            listBx.Items.Add("Damage x 50.0");
-                            listBx.Items.Add("Damage x 100.0");
-                            listBx.Items.Add("Damage x 200.0");
-                            listBx.Items.Add("Damage x 300.0");
-                            listBx.Items.Add("Damage x 500.0");
-
-                            menuMainLvl = 4;
-                            menuLvl = 2;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 4;
-                            LastMenuItm = 2;
-                            break;
-                    }
-                    break;
-
-                case 5:// Teleport
+                case 2:// Teleport
                     switch (menulevel)
                     {
                         case 2:// Location
@@ -742,110 +554,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 6:// Tunables
+                case 3:// Online Services
                     switch (menulevel)
                     {
-                        case 0:// RP Multiplier
-                            listBx.Items.Add("RP x 1.0");
-                            listBx.Items.Add("RP x 2.0");
-                            listBx.Items.Add("RP x 3.0");
-                            listBx.Items.Add("RP x 5.0");
-                            listBx.Items.Add("RP x 10.0");
-                            listBx.Items.Add("RP x 15.0");
-                            listBx.Items.Add("RP x 20.0");
-                            listBx.Items.Add("RP x 25.0");
-                            listBx.Items.Add("RP x 30.0");
-                            listBx.Items.Add("RP x 35.0");
-                            listBx.Items.Add("RP x 40.0");
-                            listBx.Items.Add("RP x 50.0");
-                            listBx.Items.Add("RP x 100.0");
-
-                            menuMainLvl = 6;
-                            menuLvl = 0;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 6;
-                            LastMenuItm = 0;
-                            break;
-
-                        case 1:// REP Multiplier
-                            listBx.Items.Add("REP x 1.0");
-                            listBx.Items.Add("REP x 2.0");
-                            listBx.Items.Add("REP x 3.0");
-                            listBx.Items.Add("REP x 5.0");
-                            listBx.Items.Add("REP x 10.0");
-                            listBx.Items.Add("REP x 15.0");
-                            listBx.Items.Add("REP x 20.0");
-                            listBx.Items.Add("REP x 25.0");
-                            listBx.Items.Add("REP x 30.0");
-                            listBx.Items.Add("REP x 35.0");
-                            listBx.Items.Add("REP x 40.0");
-                            listBx.Items.Add("REP x 50.0");
-                            listBx.Items.Add("REP x 100.0");
-                            listBx.Items.Add("REP x 200.0");
-                            listBx.Items.Add("REP x 300.0");
-                            listBx.Items.Add("REP x 500.0");
-                            listBx.Items.Add("REP x 1000.0");
-
-                            menuMainLvl = 6;
-                            menuLvl = 1;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 6;
-                            LastMenuItm = 1;
-                            break;
-                    }
-                    break;
-
-                case 7:// Online Services
-                    switch (menulevel)
-                    {
-                        case 0:// Casino Prize Wheel
-                            listBx.Items.Add("Clothes (0)");
-                            listBx.Items.Add("RP (1)");
-                            listBx.Items.Add("Cash (1)");
-                            listBx.Items.Add("Chips (1)");
-                            listBx.Items.Add("Discount");
-                            listBx.Items.Add("RP (2)");
-                            listBx.Items.Add("Cash (2)");
-                            listBx.Items.Add("Chips (2)");
-                            listBx.Items.Add("Clothes (2)");
-                            listBx.Items.Add("RP (3)");
-                            listBx.Items.Add("Chips (3)");
-                            listBx.Items.Add("Mystery Price");
-                            listBx.Items.Add("Clothes (3)");
-                            listBx.Items.Add("RP (4)");
-                            listBx.Items.Add("Chips (4)");
-                            listBx.Items.Add("Clothes (4)");
-                            listBx.Items.Add("RP (5)");
-                            listBx.Items.Add("Podium Vehicle");
-
-                            menuMainLvl = 7;
-                            menuLvl = 0;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 7;
-                            LastMenuItm = 0;
-                            break;
-
-                        case 1:
-                            listBx.Items.Add("South American Imports");
-                            listBx.Items.Add("Pharmaceutical Research");
-                            listBx.Items.Add("Organic Produce");
-                            listBx.Items.Add("Printing and Copying");
-                            listBx.Items.Add("Cash Creation");
-                            listBx.Items.Add("Sporting Goods");
-                            listBx.Items.Add("Cargo and Shipments");
-
-                            menuMainLvl = 7;
-                            menuLvl = 1;
-
-                            LastMenuMainLvl = 1;
-                            LastMenuLvl = 7;
-                            LastMenuItm = 1;
-                            break;
-
-                        case 2:// Quick car spawn
+                        case 0:// Quick car spawn
                             listBx.Items.Add("ZR380");
                             listBx.Items.Add("Deluxo");
                             listBx.Items.Add("Opressor2");
@@ -855,12 +567,12 @@ namespace GTAVCSMM
                             listBx.Items.Add("Future Dominator");
                             listBx.Items.Add("Future Imperator");
 
-                            menuMainLvl = 7;
-                            menuLvl = 2;
+                            menuMainLvl = 3;
+                            menuLvl = 0;
 
                             LastMenuMainLvl = 1;
-                            LastMenuLvl = 7;
-                            LastMenuItm = 2;
+                            LastMenuLvl = 3;
+                            LastMenuItm = 0;
                             break;
                     }
                     break;
@@ -897,19 +609,10 @@ namespace GTAVCSMM
                                     listboxFill(1, 3);// Vehicle
                                     break;
                                 case 4:
-                                    listboxFill(1, 4);// Weapon
+                                    listboxFill(1, 4);// Online Services
                                     break;
                                 case 5:
-                                    listboxFill(1, 5);// Teleport
-                                    break;
-                                case 6:
-                                    listboxFill(1, 6);// Tunables
-                                    break;
-                                case 7:
-                                    listboxFill(1, 7);// Online Services
-                                    break;
-                                case 8:
-                                    listboxFill(1, 8);// World
+                                    listboxFill(1, 5);// World
                                     break;
                             }
                             break;
@@ -991,38 +694,8 @@ namespace GTAVCSMM
                                 case 0:// God mode
                                     bGodMode = !bGodMode;
                                     break;
-                                /*case 1:// Super Jump
-                                    bSuperJump = !bSuperJump;
-                                    break;*/
-                                case 1:// Never wanted
-                                    bNeverWanted = !bNeverWanted;
-                                    break;
-                                case 2:// Seatbelt
-                                    bSeatBelt = !bSeatBelt;
-                                    break;
-                                case 3:// No Ragdoll
-                                    bNoRagdoll = !bNoRagdoll;
-                                    break;
-                                case 4:// Undead Off-radar
-                                    bUndeadOffRadar = !bUndeadOffRadar;
-                                    break;
-                                case 5:// Disable Collission
-                                    bDisableCollision = !bDisableCollision;
-                                    break;
-                                case 6:// case 2:// Player case 7:// Skills
-                                    listboxFill(2, 6);
-                                    break;
-                                case 7:
-                                    listboxFill(2, 7);// Swim Speed
-                                    break;
-                                case 8:
-                                    listboxFill(2, 8);// Stealth Speed
-                                    break;
-                                case 9:
-                                    listboxFill(2, 9);// Run Speed
-                                    break;
-                                case 10:
-                                    listboxFill(2, 10);// Wanted Level
+                                case 1:
+                                    listboxFill(2, 1);// Wanted Level
                                     break;
                             }
                             break;
@@ -1034,34 +707,7 @@ namespace GTAVCSMM
                                     break;
                             }
                             break;
-                        case 4:// Weapon
-                            switch (menuItem)
-                            {
-                                case 0:// Explosive Ammo
-                                    bExplosiveAmmo = !bExplosiveAmmo;
-                                    break;
-                                case 1:// Range
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oRange }, 250F);
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oLockRange }, 250F);
-                                    break;
-                                case 2:// Fast reload
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oReloadMult }, 10F);
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oReloadVehicleMult }, 10F);
-                                    break;
-                                case 3:// Weapon Damage
-                                    listboxFill(4, 2);
-                                    break;
-                                case 4:// Weapon Unlimited Ammo
-                                    setWeaponUnlimitedAmmo();
-                                    break;
-                                case 5:// Fill All Ammo
-                                    fill_all_ammo();
-                                    break;
-                            }
-                            break;
-                        case 5:// Teleport
+                        case 4:// Teleport
                             switch (menuItem)
                             {
                                 case 0:// Waypoint
@@ -1108,36 +754,14 @@ namespace GTAVCSMM
                                     break;
                             }
                             break;
-                        case 6:// Tunables
+
+                        case 5:// Online Services
                             switch (menuItem)
                             {
-                                case 0:// RP Multiplier
-                                    listboxFill(6, 0);
+                                case 0:// Quick car spawn
+                                    listboxFill(5, 0);
                                     break;
-                                case 1:// REP Multiplier
-                                    listboxFill(6, 1);
-                                    break;
-                                case 2:// Nightclub Popularity
-                                    Activate();
-                                    setStat("MP0_CLUB_POPULARITY", 1000);
-                                    setStat("MP1_CLUB_POPULARITY", 1000);
-                                    break;
-                            }
-                            break;
-                        case 7:// Online Services
-                            switch (menuItem)
-                            {
-                                case 0:// Get Lucky Wheel Prize
-                                    listboxFill(7, 0);
-                                    break;
-                                case 1:// Faster Nightclub Production
-                                    set_nightclub_produce_time(1, true);
-                                    Activate();
-                                    break;
-                                case 2:// Quick car spawn
-                                    listboxFill(7, 2);
-                                    break;
-                                case 3:// Manual car spawn
+                                case 1:// Manual car spawn
                                     new Thread(() =>
                                     {
                                         Thread.CurrentThread.IsBackground = true;
@@ -1151,7 +775,7 @@ namespace GTAVCSMM
                                     break;
                             }
                             break;
-                        case 8:// World
+                        case 6:// World
                             switch (menuItem)
                             {
                                 case 0:
@@ -1199,295 +823,41 @@ namespace GTAVCSMM
                                     break;
                             }
                             break;
-
                     }
                     break;
-                case 2:// Skills
-                    switch (menulevel)
-                    {
-                        case 7:
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_STAM", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_STAM", 100);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_STRN", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_STRN", 100);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_LUNG", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_LUNG", 100);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_DRIV", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_DRIV", 100);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_FLY", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_FLY", 100);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_SHO", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_SHO", 100);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    setStat("MP0_SCRIPT_INCREASE_STL", 100);
-                                    setStat("MP1_SCRIPT_INCREASE_STL", 100);
-                                    break;
-                            }
+                 case 2:
+						switch (menuItem)
+						{
+							case 0:
+                            Activate();
+                            Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 0);
                             break;
-
-                        case 8:// Swim Speed
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 0.0f);
+							case 1:
+                            Activate();
+                            Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 1);
                                     break;
-                                case 1:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 0.5f);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 1.0f);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 1.5f);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 2.0f);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 2.5f);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 3.0f);
-                                    break;
-                                case 7:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 3.5f);
-                                    break;
-                                case 8:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 4.0f);
-                                    break;
-                                case 9:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 4.5f);
-                                    break;
-                                case 10:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oSwimSpeed }, 5.0f);
-                                    break;
-                            }
+                            case 2:
+                            Activate();
+                            Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 2);
                             break;
-
-                        case 9:// Walk Speed
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 0.0f);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 0.5f);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 1.0f);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 1.5f);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 2.0f);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 2.5f);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 3.0f);
-                                    break;
-                                case 7:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 3.5f);
-                                    break;
-                                case 8:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 4.0f);
-                                    break;
-                                case 9:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 4.5f);
-                                    break;
-                                case 10:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWalkSpeed }, 5.0f);
-                                    break;
-                            }
+                            case 3:
+                            Activate();
+                            Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 3);
                             break;
-
-                        case 10:// Run Speed
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 0.0f);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 0.5f);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 1.0f);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 1.5f);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 2.0f);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 2.5f);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 3.0f);
-                                    break;
-                                case 7:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 3.5f);
-                                    break;
-                                case 8:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 4.0f);
-                                    break;
-                                case 9:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 4.5f);
-                                    break;
-                                case 10:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oRunSpeed }, 5.0f);
-                                    break;
-                            }
+                            case 4:
+                            Activate();
+                            Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 4);
                             break;
-
-                        case 11:// Wanted Level
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 0);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 1);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 2);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 3);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 4);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 5);
-                                    break;
-                            }
+                            case 5:
+                            Activate();
+                            Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 5);
                             break;
+                        }
+                        break;
                     }
                     break;
 
-                case 4:// Damage Multiplier
-                    switch (menulevel)
-                    {
-                        case 2:
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 1.0f);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 2.0f);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 3.0f);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 5.0f);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 10.0f);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 20.0f);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 30.0f);
-                                    break;
-                                case 7:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 50.0f);
-                                    break;
-                                case 8:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 100.0f);
-                                    break;
-                                case 9:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 200.0f);
-                                    break;
-                                case 10:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 30.0f);
-                                    break;
-                                case 11:
-                                    Activate();
-                                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPedWeaponManager, offsets.pCWeaponInfo, offsets.oDamage }, 500.0f);
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
-
-                case 5:// Teleport
+                case 3:// Teleport
                     switch (menulevel)
                     {
                         case 1:
@@ -1845,10 +1215,6 @@ namespace GTAVCSMM
                                         bGodMode = true;
                                         bgodState = false;
                                     }
-                                    /*
-                                        Location loc = new Location { x = 918.2499f, y = 50.25024f, z = 80.89696f };
-                                        Teleport(loc);
-                                    */
                                     tpIdArray = new int[] { 679 };
                                     tpColArray = new int[] { };
                                     teleportBlip(tpIdArray, tpColArray);
@@ -1869,10 +1235,6 @@ namespace GTAVCSMM
                                         bGodMode = true;
                                         bgodState = false;
                                     }
-                                    /*
-                                        loc = new Location { x = 777f, y = -1876f, z = 29.29654f };
-                                        Teleport(loc);
-                                    */
                                     tpIdArray = new int[] { 777 };
                                     tpColArray = new int[] { };
                                     teleportBlip(tpIdArray, tpColArray);
@@ -2046,242 +1408,10 @@ namespace GTAVCSMM
                     }
                     break;
 
-                case 6:// RP Multiplier
+                case 4:// Casino Prize Wheel
                     switch (menulevel)
                     {
-                        case 0:
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    setRPMultipler(1.0f);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    setRPMultipler(2.0f);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    setRPMultipler(3.0f);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    setRPMultipler(5.0f);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    setRPMultipler(10.0f);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    setRPMultipler(15.0f);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    setRPMultipler(20.0f);
-                                    break;
-                                case 7:
-                                    Activate();
-                                    setRPMultipler(25.0f);
-                                    break;
-                                case 8:
-                                    Activate();
-                                    setRPMultipler(30.0f);
-                                    break;
-                                case 9:
-                                    Activate();
-                                    setRPMultipler(35.0f);
-                                    break;
-                                case 10:
-                                    Activate();
-                                    setRPMultipler(40.0f);
-                                    break;
-                                case 11:
-                                    Activate();
-                                    setRPMultipler(50.0f);
-                                    break;
-                                case 12:
-                                    Activate();
-                                    setRPMultipler(100.0f);
-                                    break;
-                            }
-                            break;
-
-                        case 1:// REP Multiplier
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    setREPMultipler(1.0f);
-                                    break;
-                                case 1:
-                                    Activate();
-                                    setREPMultipler(2.0f);
-                                    break;
-                                case 2:
-                                    Activate();
-                                    setREPMultipler(3.0f);
-                                    break;
-                                case 3:
-                                    Activate();
-                                    setREPMultipler(5.0f);
-                                    break;
-                                case 4:
-                                    Activate();
-                                    setREPMultipler(10.0f);
-                                    break;
-                                case 5:
-                                    Activate();
-                                    setREPMultipler(15.0f);
-                                    break;
-                                case 6:
-                                    Activate();
-                                    setREPMultipler(20.0f);
-                                    break;
-                                case 7:
-                                    Activate();
-                                    setREPMultipler(25.0f);
-                                    break;
-                                case 8:
-                                    Activate();
-                                    setREPMultipler(30.0f);
-                                    break;
-                                case 9:
-                                    Activate();
-                                    setREPMultipler(35.0f);
-                                    break;
-                                case 10:
-                                    Activate();
-                                    setREPMultipler(40.0f);
-                                    break;
-                                case 11:
-                                    Activate();
-                                    setREPMultipler(50.0f);
-                                    break;
-                                case 12:
-                                    Activate();
-                                    setREPMultipler(100.0f);
-                                    break;
-                                case 13:
-                                    Activate();
-                                    setREPMultipler(200.0f);
-                                    break;
-                                case 14:
-                                    Activate();
-                                    setREPMultipler(300.0f);
-                                    break;
-                                case 15:
-                                    Activate();
-                                    setREPMultipler(500.0f);
-                                    break;
-                                case 16:
-                                    Activate();
-                                    setREPMultipler(1000.0f);
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
-
-                case 7:// Casino Prize Wheel
-                    switch (menulevel)
-                    {
-                        case 0:
-                            switch (menuItem)
-                            {
-                                case 0:
-                                    Activate();
-                                    casinoPrice = 1;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 1:
-                                    Activate();
-                                    casinoPrice = 2;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 2:
-                                    Activate();
-                                    casinoPrice = 3;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 3:
-                                    Activate();
-                                    casinoPrice = 4;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 4:
-                                    Activate();
-                                    casinoPrice = 5;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 5:
-                                    Activate();
-                                    casinoPrice = 6;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 6:
-                                    Activate();
-                                    casinoPrice = 7;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 7:
-                                    Activate();
-                                    casinoPrice = 8;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 8:
-                                    Activate();
-                                    casinoPrice = 9;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 9:
-                                    Activate();
-                                    casinoPrice = 10;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 10:
-                                    Activate();
-                                    casinoPrice = 11;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 11:
-                                    Activate();
-                                    casinoPrice = 12;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 12:
-                                    Activate();
-                                    casinoPrice = 13;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 13:
-                                    Activate();
-                                    casinoPrice = 14;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 14:
-                                    Activate();
-                                    casinoPrice = 15;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 15:
-                                    Activate();
-                                    casinoPrice = 16;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 16:
-                                    Activate();
-                                    casinoPrice = 17;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                                case 17:
-                                    Activate();
-                                    casinoPrice = 18;
-                                    bGetCasinoPrice = !bGetCasinoPrice;
-                                    break;
-                            }
-                            break;
-                        case 2:// Quick car spawn
+                        case 0:// Quick car spawn
                             switch (menuItem)
                             {
                                 case 0:
@@ -2330,7 +1460,7 @@ namespace GTAVCSMM
         {
             Console.WriteLine("Command to run backward: " + LastMenuMainLvl + " " + LastMenuLvl + " " + LastMenuItm);
             int oldMenuItm = LastMenuItm;
-            listboxFill(LastMenuMainLvl, LastMenuLvl);
+            ListboxFill(LastMenuMainLvl, LastMenuLvl);
             listBx.SelectedIndex = oldMenuItm;
         }
 
@@ -2473,164 +1603,6 @@ namespace GTAVCSMM
             }
         }
 
-        public static void pNEVERWANTED()
-        {
-            if (bNeverWanted)
-            {
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oWanted }, 0);
-                if (!Settings.pnwanted)
-                {
-                    Activate();
-                }
-                Settings.pnwanted = true;
-            }
-            else
-            {
-                if (Settings.pnwanted)
-                {
-                    Settings.pnwanted = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pNORAGDOLL()
-        {
-            if (bNoRagdoll)
-            {
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.oRagdoll }, 1);
-                if (!Settings.pnragdoll)
-                {
-                    Activate();
-                }
-                Settings.pnragdoll = true;
-            }
-            else
-            {
-                if (Settings.pnragdoll)
-                {
-                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.oRagdoll }, 32);
-                    Settings.pnragdoll = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pUNDEADOFFRADAR()
-        {
-            if (bUndeadOffRadar)
-            {
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.oHealthMax }, 0);
-                if (!Settings.puoffradar)
-                {
-                    Activate();
-                }
-                Settings.puoffradar = true;
-            }
-            else
-            {
-                if (Settings.puoffradar)
-                {
-                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.oHealthMax }, 328f);
-                    Settings.puoffradar = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        public static void pSEATBELT()
-        {
-            if (bSeatBelt)
-            {
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.oSeatbelt }, -55);
-                if (!Settings.psbelt)
-                {
-                    Activate();
-                }
-                Settings.psbelt = true;
-            }
-            else
-            {
-                if (Settings.psbelt)
-                {
-                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.oSeatbelt }, -56);
-                    Settings.psbelt = false;
-                    Deactivate();
-                }
-            }
-        }
-
-        /*public static void pSUPERJUMP()
-        {
-            if (bSuperJump)
-            {
-                if (!Settings.psjump)
-                {
-                    frameFlagCount = frameFlagCount + 64;
-                    Activate();
-                    Settings.psjump = true;
-                }
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-            }
-            else
-            {
-                if (Settings.psjump)
-                {
-                    frameFlagCount = frameFlagCount - 64;
-                    Deactivate();
-                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-                    Settings.psjump = false;
-                }
-            }
-        }*/
-
-        public static void pEXPLOSIVEAMMO()
-        {
-            if (bExplosiveAmmo)
-            {
-                if (!Settings.psexammo)
-                {
-                    frameFlagCount = frameFlagCount + 8;
-                    Activate();
-                    Settings.psexammo = true;
-                }
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-            }
-            else
-            {
-                if (Settings.psexammo)
-                {
-                    frameFlagCount = frameFlagCount - 8;
-                    Deactivate();
-                    Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCPlayerInfo, offsets.oFrameFlags }, frameFlagCount);
-                    Settings.psexammo = false;
-                }
-            }
-        }
-        public static void pDISABLECOLLISION()
-        {
-            long paddr = Mem.ReadPointer(Settings.WorldPTR, new int[] { offsets.pCPed, 0x30, 0x10, 0x20, 0x70, 0x0 });
-            long paddr2 = Mem.GetPtrAddr(paddr + 0x2C, null);
-
-            if (bDisableCollision)
-            {
-                Mem.writeFloat(paddr2, null, -1.0f);
-                if (!Settings.pdiscol)
-                {
-                    Activate();
-                }
-                Settings.pdiscol = true;
-            }
-            else
-            {
-                if (Settings.pdiscol)
-                {
-                    Mem.writeFloat(paddr2, null, 0.25f);
-                    Settings.pdiscol = false;
-                    Deactivate();
-                }
-            }
-        }
         public static void vGODMODE()
         {
             long paddr = Mem.ReadPointer(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCVehicle });
@@ -2657,6 +1629,7 @@ namespace GTAVCSMM
                 }
             }
         }
+		
         public static void vCOPKILLER()
         {
             if (bCopKiller)
@@ -2677,13 +1650,7 @@ namespace GTAVCSMM
                 }
             }
         }
-        public static void cPRICE()
-        {
-            if (bGetCasinoPrice)
-            {
-                getLuckyWheelPrice(casinoPrice);
-            }
-        }
+		
         public static void carSpawn(string Hash, int pegasus = 0)
         {
             string model = Hash.ToLower();
@@ -2778,6 +1745,7 @@ namespace GTAVCSMM
                 SG<int>(1574589, 1);
             });
         }
+
         public static void empty_session()
         {
             Task.Run(() =>
@@ -2788,37 +1756,6 @@ namespace GTAVCSMM
             });
         }
 
-        public static void getLuckyWheelPrice(int id)
-        {
-            string script = "casino_lucky_wheel";
-            int Index = 274 + 14;
-            long scriptAddr = GetLocalScript(script);
-            if (scriptAddr > 0 && id > 0)
-            {
-                long scriptAddr2 = scriptAddr + (8 * Index);
-                Console.WriteLine(scriptAddr2);
-                int scriptInt = Mem.ReadInt(scriptAddr2, null);
-                Console.WriteLine(scriptInt);
-                Mem.writeInt(scriptAddr2, null, id);
-            }
-        }
-        public static void setRPMultipler(float m)
-        {
-            SG<float>(262145 + 1, m);
-        }
-
-        public static void setREPMultipler(float m)
-        {
-            SG<float>(262145 + 31294, m); // Street Race - old 31278 + 16 for 1.60
-            SG<float>(262145 + 31295, m); // Pursuit Race
-            SG<float>(262145 + 31296, m); // Scramble
-            SG<float>(262145 + 31297, m); // Head 2 Head
-            SG<float>(262145 + 31289, m); // Car Meet
-            SG<float>(262145 + 31300, m); // Test Track
-            SG<float>(262145 + 31328, m); // Auto Shop Contract
-            SG<float>(262145 + 31329, m); // Customer Deliveries
-            SG<float>(262145 + 31330, m); // Exotic Exports Deliveries
-        }
         public static void getPeds()
         {
             int pedListOffset = 0x10;
@@ -2833,6 +1770,7 @@ namespace GTAVCSMM
                 }
             }
         }
+
         public static void getVehs()
         {
             int count = Mem.ReadInt(Settings.ReplayInterfacePTR, new int[] { offsets.pCVehicleInterface, offsets.oVehNum });
@@ -2844,53 +1782,6 @@ namespace GTAVCSMM
                     vehList.Add(Veh);
                 }
             }
-        }
-
-        public static void set_nightclub_produce_time(int produce_time, bool toggle)
-        {
-            // Time to Produce
-            SG<int>(262145 + 24135, toggle ? produce_time : 4800000);   // Sporting Goods
-            SG<int>(262145 + 24136, toggle ? produce_time : 14400000);  // South American Imports
-            SG<int>(262145 + 24137, toggle ? produce_time : 7200000);   // Pharmaceutical Research
-            SG<int>(262145 + 24138, toggle ? produce_time : 2400000);   // Organic Produce
-            SG<int>(262145 + 24139, toggle ? produce_time : 1800000);   // Printing and Copying
-            SG<int>(262145 + 24140, toggle ? produce_time : 3600000);   // Cash Creation
-            SG<int>(262145 + 24141, toggle ? produce_time : 8400000);   // Cargo and Shipments
-        }
-
-        public static void set_mc_produce_time(int produce_time, bool toggle)
-        {
-            // Base Time to Produce
-            SG<int>(262145 + 17198, toggle ? produce_time : 360000);  // Weed
-            SG<int>(262145 + 17199, toggle ? produce_time : 1800000);  // Meth
-            SG<int>(262145 + 17200, toggle ? produce_time : 3000000);  // Cocaine
-            SG<int>(262145 + 17201, toggle ? produce_time : 300000);  // Documents
-            SG<int>(262145 + 17202, toggle ? produce_time : 720000);  // Cash
-
-            // Time to Produce Reductions
-            SG<int>(262145 + 17203, toggle ? 1 : 60000);  // Documents Equipment
-            SG<int>(262145 + 17204, toggle ? 1 : 120000);  // Cash Equipment
-            SG<int>(262145 + 17205, toggle ? 1 : 600000);  // Cocaine Equipment
-            SG<int>(262145 + 17206, toggle ? 1 : 360000);  // Meth Equipment
-            SG<int>(262145 + 17207, toggle ? 1 : 60000);  // Weed Equipment
-            SG<int>(262145 + 17208, toggle ? 1 : 60000);  // Documents Staff
-            SG<int>(262145 + 17209, toggle ? 1 : 120000);  // Cash Staff
-            SG<int>(262145 + 17210, toggle ? 1 : 600000);  // Cocaine Staff
-            SG<int>(262145 + 17211, toggle ? 1 : 360000);  // Meth Staff
-            SG<int>(262145 + 17212, toggle ? 1 : 60000);  // Weed Staff
-        }
-
-        public static void setWeaponUnlimitedAmmo()
-        {
-            Task.Run(() =>
-            {
-                ProcessMgr.SuspendProcess(Settings.gameProcess);
-                Task.Delay(20).Wait();
-                Mem.Write(Settings.WorldPTR, new int[] { offsets.pCPed, offsets.pCWeaponInventory, offsets.oAmmoModifier }, 1);
-                Task.Delay(20).Wait();
-                Activate();
-                ProcessMgr.ResumeProcess(Settings.gameProcess);
-            });
         }
 
         public static void kill_npcs()
@@ -2970,6 +1861,7 @@ namespace GTAVCSMM
                 set_health3(vehicle, -999.9f);
             });
         }
+
         public static void destroy_vehs_of_npcs()
         {
             Task.Run(() =>
@@ -2983,6 +1875,7 @@ namespace GTAVCSMM
                 }
             });
         }
+
         public static void destroy_vehs_of_enemies()
         {
             Task.Run(() =>
@@ -2996,6 +1889,7 @@ namespace GTAVCSMM
                 }
             });
         }
+
         public static void destroy_vehs_of_cops()
         {
             Task.Run(() =>
@@ -3012,6 +1906,7 @@ namespace GTAVCSMM
                 }
             });
         }
+
         public static void destroy_all_vehicles()
         {
             Task.Run(() =>
@@ -3024,6 +1919,7 @@ namespace GTAVCSMM
                 }
             });
         }
+
         public static void revive_all_vehicles()
         {
             Task.Run(() =>
@@ -3082,6 +1978,7 @@ namespace GTAVCSMM
             else temp = (byte)(temp & ~(1 << 0));
             set_state(vehicle, temp);
         }
+
         public static void revive_vehicle(long vehicle)
         {
             set_state_is_destroyed(vehicle, false);
@@ -3235,19 +2132,7 @@ namespace GTAVCSMM
         }
         #endregion
 
-        #region Stat function
-        public static void setStat(string stat, int value)
-        {
-            uint Stat_ResotreHash = GG<uint>(1655453 + 4);
-            int Stat_ResotreValue = GG<int>(1020252 + 5526);
-            Console.WriteLine(Stat_ResotreHash + " " + Stat_ResotreValue);
-            SG<uint>(1655453 + 4, Joaat(stat));
-            SG<int>(1020252 + 5526, value);
-            SG<int>(1644218 + 1139, -1);
-            Thread.Sleep(1000);
-            SG<uint>(1655453 + 4, Stat_ResotreHash);
-            SG<int>(1020252 + 5526, Stat_ResotreValue);
-        }
+        #region JOAAT function
         public static uint Joaat(string input)
         {
             uint num1 = 0U;
