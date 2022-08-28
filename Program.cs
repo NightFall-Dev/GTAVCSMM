@@ -511,25 +511,25 @@ namespace GTAVCSMM
                             switch (menuItem)
                             {
                                 case 0:
-                                    ListBoxFill(1, 0);// Main
+                                    ListboxFill(1, 0);// Main
                                     break;
                                 case 1:
-                                    ListBoxFill(1, 1);// Session
+                                    ListboxFill(1, 1);// Session
                                     break;
                                 case 2:
-                                    ListBoxFill(1, 2);// Player
+                                    ListboxFill(1, 2);// Player
                                     break;
                                 case 3:
-                                    ListBoxFill(1, 3);// Vehicle
+                                    ListboxFill(1, 3);// Vehicle
                                     break;
                                 case 4:
-                                    ListBoxFill(1, 4);// Teleport
+                                    ListboxFill(1, 4);// Teleport
                                     break;
                                 case 5:
-                                    ListBoxFill(1, 5);// Online Services
+                                    ListboxFill(1, 5);// Online Services
                                     break;
                                 case 6:
-                                    ListBoxFill(1, 6);// World
+                                    ListboxFill(1, 6);// World
                                     break;
                             }
                             break;
