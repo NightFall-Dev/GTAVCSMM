@@ -86,7 +86,7 @@ namespace GTAVCSMM
         private static bool bGodMode = false;
         private static bool bgodState = false;
         private static bool bVehicleGodMode = false;
-        private static int frameFlagCount = 0;
+        //private static int frameFlagCount = 0;
         private static bool bCopKiller = false;
 
         [DllImport("user32.dll")]
@@ -511,25 +511,25 @@ namespace GTAVCSMM
                             switch (menuItem)
                             {
                                 case 0:
-                                    listboxFill(1, 0);// Main
+                                    ListBoxFill(1, 0);// Main
                                     break;
                                 case 1:
-                                    listboxFill(1, 1);// Session
+                                    ListBoxFill(1, 1);// Session
                                     break;
                                 case 2:
-                                    listboxFill(1, 2);// Player
+                                    ListBoxFill(1, 2);// Player
                                     break;
                                 case 3:
-                                    listboxFill(1, 3);// Vehicle
+                                    ListBoxFill(1, 3);// Vehicle
                                     break;
                                 case 4:
-                                    listboxFill(1, 4);// Teleport
+                                    ListBoxFill(1, 4);// Teleport
                                     break;
                                 case 5:
-                                    listboxFill(1, 5);// Online Services
+                                    ListBoxFill(1, 5);// Online Services
                                     break;
                                 case 6:
-                                    listboxFill(1, 6);// World
+                                    ListBoxFill(1, 6);// World
                                     break;
                             }
                             break;
