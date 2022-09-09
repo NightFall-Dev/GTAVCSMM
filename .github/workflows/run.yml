@@ -1,4 +1,4 @@
-name: Build GTAVCSMM
+name: .NET Build
 
 on:
   workflow_dispatch:
@@ -6,15 +6,21 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    name: Build
-    outputs:
-      full_sha: ${{ steps.var.outputs.full_sha }}
-      short_sha: ${{ steps.var.outputs.short_sha }}
+    name: Build GTAVCSMM
     steps:
     - name: Check out repository
       uses: actions/checkout@v3
       with:
           submodules: recursive
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v2.1.0
+      with:
+        dotnet-version: 6.0.4
+
+    - name: Restore project dependencies
+      run: dotnet restore
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.1
@@ -26,15 +32,10 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
+       retention-days: 0
        name: binary
        path: |
             bin/x64/Release/GTAVCSMM.exe
-
-    - name: Generate Build Info
-      id: var
-      run: |
-          echo "::set-output name=full_sha::$(git rev-parse HEAD)"
-          echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
 
   check_detections:
     runs-on: ubuntu-latest
@@ -47,7 +48,11 @@ jobs:
           name: binary
 
       - name: Test file for detected bits
-        id: detections
         uses: Yimura/gtav-sigscan-action@v0.0.3
         with:
           file: ./GTAVCSMM.exe
+      
+      - name: Delete Artifact
+        uses: GeekyEggo/delete-artifact@v1.0.0
+        with:
+          name: binary
